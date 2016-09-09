@@ -4,10 +4,10 @@
 
 # Getting started
 
-1. install git
+## install git
 * 윈도우 환경에서는 git for windows와 CUI 환경이 싫다면 tortoisegit을 까는 것을 추천함
 
-2. git checkout
+## git checkout
 * 원격 주소 :
 https 를 사용할 경우 : https://github.com/MappyTheKat/sudoku.git
 SSH를 사용할 경우 : git@github.com:MappyTheKat/sudoku.git
