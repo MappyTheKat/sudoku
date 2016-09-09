@@ -31,3 +31,4 @@ SSH를 사용할 경우 : git@github.com:MappyTheKat/sudoku.git
 # References
 https://kjell.haxx.se/sudoku/  
 http://www.sudokuwiki.org/Getting_Started
+http://sudopedia.enjoysudoku.com/
