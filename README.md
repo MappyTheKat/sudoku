@@ -29,10 +29,14 @@
 
 ## git checkout
 * 원격 주소 :
-https 를 사용할 경우 : https://github.com/MappyTheKat/sudoku.git
-SSH를 사용할 경우 : git@github.com:MappyTheKat/sudoku.git
+** https 를 사용할 경우 : https://github.com/MappyTheKat/sudoku.git
+** SSH를 사용할 경우 : git@github.com:MappyTheKat/sudoku.git
 
 # References
-https://kjell.haxx.se/sudoku/  
-http://www.sudokuwiki.org/Getting_Started
-http://sudopedia.enjoysudoku.com/
+## 스도쿠 관련
+* https://kjell.haxx.se/sudoku/  
+* http://www.sudokuwiki.org/Getting_Started
+* http://sudopedia.enjoysudoku.com/
+
+## Jenkins-github 연동 관련
+* http://yookeun.github.io/tools/2014/09/18/jenkins-github/
