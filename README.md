@@ -1,42 +1,42 @@
-# sudoku
-* Ã¢ÀÇÀû ÅëÇÕ¼³°è ÇÁ·ÎÁ§Æ®
-* ÈŞÁö½ºÆ½À¸·Î ½ºµµÄí¸¦ Çª´Â º¿À» ¸¸µéÀÚ
-* Çü»ó°ü¸® - ºôµå°ü¸® - ¹èÆ÷°ü¸®(?) ÇÁ·Î¼¼½º¸¦ ¹è¿öº¾½Ã´Ù
+ï»¿# sudoku
+* ì°½ì˜ì  í†µí•©ì„¤ê³„ í”„ë¡œì íŠ¸
+* íœ´ì§€ìŠ¤í‹±ìœ¼ë¡œ ìŠ¤ë„ì¿ ë¥¼ í‘¸ëŠ” ë´‡ì„ ë§Œë“¤ì
+* í˜•ìƒê´€ë¦¬ - ë¹Œë“œê´€ë¦¬ - ë°°í¬ê´€ë¦¬(?) í”„ë¡œì„¸ìŠ¤ë¥¼ ë°°ì›Œë´…ì‹œë‹¤
 
-## Çü»ó°ü¸®
+## í˜•ìƒê´€ë¦¬
 
-* º¸´Ù½ÃÇÇ git À¸·Î °ü¸®
-* ¹«¾ùÀÌ ´õ ù±é©ùÛòµ?
+* ë³´ë‹¤ì‹œí”¼ git ìœ¼ë¡œ ê´€ë¦¬
+* ë¬´ì—‡ì´ ë” å¿…è¦éŸ“ç´™?
 
-## ºôµå°ü¸®
+## ë¹Œë“œê´€ë¦¬
 
-* jenkins¸¦ ¾²Áö ¾ÊÀ»±î?
+* jenkinsë¥¼ ì“°ì§€ ì•Šì„ê¹Œ?
 
 ### unit test tool
 
-* Àß ¸ğ¸£°ÚÀ½
+* ì˜ ëª¨ë¥´ê² ìŒ
 
-## ¹èÆ÷°ü¸®
+## ë°°í¬ê´€ë¦¬
 
-* ¾ÆÁ÷ »ı°¢ÇØº¸Áö ¾ÊÀ½
+* ì•„ì§ ìƒê°í•´ë³´ì§€ ì•ŠìŒ
 
 # Getting started
 
 ## install git
-* À©µµ¿ì È¯°æ¿¡¼­´Â git for windows¿Í CUI È¯°æÀÌ ½È´Ù¸é tortoisegitÀ» ±î´Â °ÍÀ» ÃßÃµÇÔ
-* ´Ù¸¥ È¯°æÀº ³ªµµ ¸ô¶ó
-* ssh¸¦ ÀÌ¿ëÇÑ authencicationÀÌ ÇÊ¿äÇÏ´Ù¸é ssh Å¬¶óÀÌ¾ğÆ®´Â OpenSSH¸¦ »ç¿ëÇÏ´Â°ÍÀ» ÃßÃµÇÔ
+* ìœˆë„ìš° í™˜ê²½ì—ì„œëŠ” git for windowsì™€ CUI í™˜ê²½ì´ ì‹«ë‹¤ë©´ tortoisegitì„ ê¹ŒëŠ” ê²ƒì„ ì¶”ì²œí•¨
+* ë‹¤ë¥¸ í™˜ê²½ì€ ë‚˜ë„ ëª°ë¼
+* sshë¥¼ ì´ìš©í•œ authencicationì´ í•„ìš”í•˜ë‹¤ë©´ ssh í´ë¼ì´ì–¸íŠ¸ëŠ” OpenSSHë¥¼ ì‚¬ìš©í•˜ëŠ”ê²ƒì„ ì¶”ì²œí•¨
 
 ## git checkout
-* ¿ø°İ ÁÖ¼Ò :
-** https ¸¦ »ç¿ëÇÒ °æ¿ì : https://github.com/MappyTheKat/sudoku.git
-** SSH¸¦ »ç¿ëÇÒ °æ¿ì : git@github.com:MappyTheKat/sudoku.git
+* ì›ê²© ì£¼ì†Œ :
+** https ë¥¼ ì‚¬ìš©í•  ê²½ìš° : https://github.com/MappyTheKat/sudoku.git
+** SSHë¥¼ ì‚¬ìš©í•  ê²½ìš° : git@github.com:MappyTheKat/sudoku.git
 
 # References
-## ½ºµµÄí °ü·Ã
+## ìŠ¤ë„ì¿  ê´€ë ¨
 * https://kjell.haxx.se/sudoku/  
 * http://www.sudokuwiki.org/Getting_Started
 * http://sudopedia.enjoysudoku.com/
 
-## Jenkins-github ¿¬µ¿ °ü·Ã
+## Jenkins-github ì—°ë™ ê´€ë ¨
 * http://yookeun.github.io/tools/2014/09/18/jenkins-github/
