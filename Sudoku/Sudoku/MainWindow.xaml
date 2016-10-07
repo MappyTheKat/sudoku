@@ -5,8 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sudoku"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="768" Width="1024">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="2" x:Name="xTextBlockHelloworld" FontSize="100" Grid.ColumnSpan="9" Margin="58,32,74,50" Grid.RowSpan="4"> Hello world</TextBlock>
+        <TextBox Grid.ColumnSpan="5" FontSize="75" x:Name="xTextBoxTextInput">텍스트를 입력하십시오.</TextBox>
+        <Button Grid.Row="8" Grid.Column="5" Grid.ColumnSpan="2" x:Name="xButtonBelow">Hello World</Button>
+        <local:UserControl1 Grid.Column="5" Grid.Row="4"></local:UserControl1>
     </Grid>
 </Window>

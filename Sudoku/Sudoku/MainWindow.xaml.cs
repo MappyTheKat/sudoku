@@ -23,6 +23,27 @@ namespace Sudoku
         public MainWindow()
         {
             InitializeComponent();
+            xButtonBelow.Click += xButton_Pressed;
+
+            this.Loaded += MainWindow_Loaded;
+            this.xTextBoxTextInput.TextChanged += xTextBoxTextInputChanged;
+        }
+
+        void xTextBoxTextInputChanged(object sender, TextChangedEventArgs e)
+        {
+            var textbox = sender as TextBox;
+            xTextBlockHelloworld.Text = textbox.Text;
+            
+        }
+        
+        void MainWindow_Loaded(object sender, EventArgs e)
+        {
+            xTextBlockHelloworld.Text = "Loaded";
+        }
+
+        void xButton_Pressed(object sender, EventArgs e)
+        {
+            xTextBlockHelloworld.Text = "hahahahahahaha";
         }
     }
 }
