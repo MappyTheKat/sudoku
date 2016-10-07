@@ -34,5 +34,7 @@
         <TextBox Grid.ColumnSpan="5" FontSize="75" x:Name="xTextBoxTextInput">텍스트를 입력하십시오.</TextBox>
         <Button Grid.Row="8" Grid.Column="5" Grid.ColumnSpan="2" x:Name="xButtonBelow">Hello World</Button>
         <local:UserControl1 Grid.Column="5" Grid.Row="4"></local:UserControl1>
+        <Button x:Name="button" Content="Button" Grid.Column="7" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Width="112" Height="154" Grid.RowSpan="2"/>
+        <CheckBox x:Name="checkBox" Content="CheckBox" Grid.Column="3" HorizontalAlignment="Left" Margin="103,37,0,0" Grid.Row="5" VerticalAlignment="Top"/>
     </Grid>
 </Window>
