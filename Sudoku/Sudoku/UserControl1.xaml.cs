@@ -23,6 +23,7 @@ namespace Sudoku
         public UserControl1()
         {
             InitializeComponent();
+            
         }
     }
 }
