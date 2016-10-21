@@ -8,33 +8,29 @@
         Title="MainWindow" Height="768" Width="1024">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="2" x:Name="xTextBlockHelloworld" FontSize="100" Grid.ColumnSpan="9" Margin="58,32,74,50" Grid.RowSpan="4"> Hello world</TextBlock>
-        <TextBox Grid.ColumnSpan="5" FontSize="75" x:Name="xTextBoxTextInput">텍스트를 입력하십시오.</TextBox>
-        <Button Grid.Row="8" Grid.Column="5" Grid.ColumnSpan="2" x:Name="xButtonBelow">Hello World</Button>
-        <local:UserControl1 Grid.Column="5" Grid.Row="4"></local:UserControl1>
-        <Button x:Name="button" Content="Button" Grid.Column="7" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Width="112" Height="154" Grid.RowSpan="2"/>
-        <CheckBox x:Name="checkBox" Content="CheckBox" Grid.Column="3" HorizontalAlignment="Left" Margin="103,37,0,0" Grid.Row="5" VerticalAlignment="Top"/>
+        <Border BorderThickness="5">
+            <Grid x:Name="xGridPuzzleBoard">
+                <TextBox>FUCK</TextBox>
+            </Grid>
+        </Border>
+        <Border BorderThickness="5" Grid.Column="1">
+            <StackPanel x:Name="xStackPanelOptions"  >
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock FontSize="20">문제 크기 설정</TextBlock>
+                    <ComboBox x:Name="xComboBoxSelectPuzzleSize" HorizontalAlignment="Right" SelectedIndex="0" SelectionChanged="xComboBoxGridsizeSelectChanged">
+                        <ComboBox.Items>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>4</ComboBoxItem>
+                            <ComboBoxItem>5</ComboBoxItem>
+                            <ComboBoxItem>6(Maybe Impossible?)</ComboBoxItem>
+                            <ComboBoxItem>7(Maybe Impossible?)</ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
