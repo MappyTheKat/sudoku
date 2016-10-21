@@ -16,14 +16,14 @@ using System.Windows.Shapes;
 namespace Sudoku
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for PuzzleGrid.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class PuzzleGrid : UserControl
     {
-        public UserControl1()
+        public List<Grid> grids = new List<Grid>();
+        public PuzzleGrid()
         {
             InitializeComponent();
-            
         }
     }
 }
