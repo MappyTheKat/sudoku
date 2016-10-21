@@ -60,7 +60,7 @@ namespace Sudoku
                 "1 2 3 4 5 6 7 8 9\n";
 
             ret = // valid dummy puzzle data!
-                "6 9 3 7 2 4 5 1 8\n" +
+                "0 9 3 7 2 4 5 1 8\n" +
                 "1 2 7 8 5 9 3 6 4\n" +
                 "4 8 5 3 1 6 9 2 7\n" +
                 "5 6 9 4 8 2 7 3 1\n" +
@@ -79,7 +79,11 @@ namespace Sudoku
         void solve_backTrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine(board.get_board_string());
+            Console.WriteLine(board.to_string());
+
+            module_backtrack mb = new module_backtrack(board);
+            mb.solve();
+            mb.clone_to_original();
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
             return;
@@ -94,7 +98,7 @@ namespace Sudoku
 
         public Board(string str)
         {
-            string[] parsed = str.Trim().Split();
+            string[] parsed = str.Trim().Replace(" \n", " ").Split();
             if (parsed.Length != 81)
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
@@ -112,7 +116,7 @@ namespace Sudoku
             }
         }
 
-        public string get_board_string()
+        public string to_string()
         // 내부 판정보 string 반환
         {
             string a = "";
@@ -223,9 +227,15 @@ namespace Sudoku
         public module_backtrack(Board b)
         {
             original = b;
-            copied = new Board(b.get_board_string());
+            copied = new Board(b.to_string());
             gridSize = copied.gridSize;
         }
+
+        public void clone_to_original()
+        {
+            original = copied;
+        }
+
 
         private int count_zero()
         //copied 내부의 0 개수 반환
