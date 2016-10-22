@@ -109,7 +109,7 @@ namespace Sudoku
         void solve_backTrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine(board.to_string());
+            Console.WriteLine(board.ToString());
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
             return;

@@ -32,7 +32,7 @@ namespace Sudoku
             }
         }
 
-        public string to_string()
+        public override string ToString()
         // 내부 판정보 string 반환
         {
             string a = "";

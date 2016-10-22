@@ -15,7 +15,7 @@ namespace Sudoku.Modules
         public BacktrackingModule(Board b)
         {
             original = b;
-            copied = new Board(b.to_string());
+            copied = new Board(b.ToString());
             gridSize = copied.gridSize;
         }
 
