@@ -7,14 +7,14 @@ using Sudoku.Modules;
 
 namespace Sudoku
 {
-    public class Board
+    public class Board : ICloneable
     {
         public int[,] boardData; // 0 은 빈칸
         public int gridSize; // 작은 네모칸의 사이즈
 
         public Board(string str)
         {
-            string[] parsed = str.Trim().Replace(" \n","").Split();
+            string[] parsed = str.Trim().Replace(" \n", "").Split();
             if (parsed.Length != 81)
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
@@ -131,6 +131,36 @@ namespace Sudoku
                 }
             }
             return sum == (gridSize + 1) * gridSize / 2 * gridSize;
+        }
+
+        // 기본 생성자. Clone을 구현하기 위해서 만든 것이니 웬만하면 호출하지 맙시다.
+        public Board()
+        {
+
+        }
+
+        public Board Clone()
+        {
+            return this.Clone();
+        }
+
+        object ICloneable.Clone()
+        {
+            var board = new Board();
+            board.gridSize = this.gridSize;
+
+            board.boardData = new int[this.gridSize, this.gridSize];
+
+            // 내용을 그대로 복사한다.
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    board.boardData[i, j] = this.boardData[i, j];
+                }
+            }
+            return board;
+            // throw new NotImplementedException();
         }
     }
 }

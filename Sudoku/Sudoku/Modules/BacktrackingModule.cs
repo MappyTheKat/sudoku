@@ -36,7 +36,7 @@ namespace Sudoku.Modules
 
         public void clone_to_original()
         {
-            original = copied;
+            original = copied.Clone();
         }
 
         public bool solve()
