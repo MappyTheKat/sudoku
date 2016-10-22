@@ -14,7 +14,7 @@ namespace Sudoku
 
         public Board(string str)
         {
-            string[] parsed = str.Trim().Split();
+            string[] parsed = str.Trim().Replace(" \n","").Split();
             if (parsed.Length != 81)
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
@@ -32,7 +32,7 @@ namespace Sudoku
             }
         }
 
-        public string get_board_string()
+        public string to_string()
         // 내부 판정보 string 반환
         {
             string a = "";

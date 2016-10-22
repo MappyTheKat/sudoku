@@ -90,7 +90,7 @@ namespace Sudoku
                 "1 2 3 4 5 6 7 8 9\n";
 
             ret = // valid dummy puzzle data!
-                "6 9 3 7 2 4 5 1 8\n" +
+                "0 9 3 7 2 4 5 1 8\n" +
                 "1 2 7 8 5 9 3 6 4\n" +
                 "4 8 5 3 1 6 9 2 7\n" +
                 "5 6 9 4 8 2 7 3 1\n" +
@@ -109,7 +109,7 @@ namespace Sudoku
         void solve_backTrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine(board.get_board_string());
+            Console.WriteLine(board.to_string());
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
             return;
