@@ -29,17 +29,6 @@
                             <ComboBoxItem>7(Maybe Impossible?)</ComboBoxItem>
                         </ComboBox.Items>
                     </ComboBox>
-                    <TextBlock FontSize="20">예제 입력</TextBlock>
-                    <ComboBox x:Name="xComboBoxSelectSampleInput" SelectedIndex="0">
-                        <ComboBox.Items>
-                            <ComboBoxItem>1</ComboBoxItem>
-                            <ComboBoxItem>2</ComboBoxItem>
-                            <ComboBoxItem>3</ComboBoxItem>
-                            <ComboBoxItem>4</ComboBoxItem>
-                            <ComboBoxItem>5</ComboBoxItem>
-                        </ComboBox.Items>
-                    </ComboBox>
-                    <Button x:Name="xButtonSolveNow">풀어</Button>
                 </StackPanel>
             </StackPanel>
         </Border>

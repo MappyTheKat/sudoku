@@ -14,7 +14,7 @@ namespace Sudoku
 
         public Board(string str)
         {
-            string[] parsed = str.Trim().Replace("\n", "").Split();
+            string[] parsed = str.Trim().Replace(" \n", "").Split();
             if (parsed.Length != 81)
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
@@ -47,6 +47,14 @@ namespace Sudoku
             return a;
         }
 
+        public void solve()
+        {
+            Console.WriteLine("solving started");
+            BacktrackingModule mb = new BacktrackingModule(this);
+            mb.solve();
+            Console.WriteLine("Solving completed");
+        }
+
         public bool isValid()
         {
             //check wether board is valid
@@ -62,7 +70,8 @@ namespace Sudoku
                         if (boardData[i, k] == j)
                             cnt++;
                     }
-                    if (cnt > 1)
+                    //Console.WriteLine("row:{0}, checking {1}", i, j);
+                    if (cnt != 1)
                         return false;
                 }
             }
@@ -78,7 +87,7 @@ namespace Sudoku
                         if (boardData[k, i] == j)
                             cnt++;
                     }
-                    if (cnt > 1)
+                    if (cnt != 1)
                         return false;
                 }
             }
@@ -98,7 +107,8 @@ namespace Sudoku
                         if (boardData[row + (k / width), col + (k % width)] == j)
                             cnt++;
                     }
-                    if (cnt > 1)
+                    //Console.WriteLine("row:{0}, col:{1} checking {2} cnt:{3}", row, col, j, cnt);
+                    if (cnt != 1)
                         return false;
                 }
             }
@@ -129,9 +139,9 @@ namespace Sudoku
 
         }
 
-        public Board Copy()
+        public Board Clone()
         {
-            return ((ICloneable)this).Clone() as Board;
+            return this.Clone();
         }
 
         object ICloneable.Clone()
