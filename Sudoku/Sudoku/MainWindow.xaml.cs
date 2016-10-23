@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Sudoku.Modules;
+
 namespace Sudoku
 {
     /// <summary>
@@ -175,7 +177,7 @@ namespace Sudoku
         {
             Console.WriteLine("hello, Cruel World!");
             Console.WriteLine(board.ToString());
-            
+            BacktrackingModule bm = new BacktrackingModule(board);
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
             return;

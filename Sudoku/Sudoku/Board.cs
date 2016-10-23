@@ -62,8 +62,7 @@ namespace Sudoku
                         if (boardData[i, k] == j)
                             cnt++;
                     }
-                    //Console.WriteLine("row:{0}, checking {1}", i, j);
-                    if (cnt != 1)
+                    if (cnt > 1)
                         return false;
                 }
             }
@@ -79,7 +78,7 @@ namespace Sudoku
                         if (boardData[k, i] == j)
                             cnt++;
                     }
-                    if (cnt != 1)
+                    if (cnt > 1)
                         return false;
                 }
             }
@@ -99,8 +98,7 @@ namespace Sudoku
                         if (boardData[row + (k / width), col + (k % width)] == j)
                             cnt++;
                     }
-                    //Console.WriteLine("row:{0}, col:{1} checking {2} cnt:{3}", row, col, j, cnt);
-                    if (cnt != 1)
+                    if (cnt > 1)
                         return false;
                 }
             }

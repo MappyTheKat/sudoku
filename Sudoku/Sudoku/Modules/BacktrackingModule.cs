@@ -52,26 +52,33 @@ namespace Sudoku.Modules
 
         public bool backtrack(int n)
         {
+            int i, j, k;
             if (n == 0)
-                return true;
+                return copied.isComplete();
 
-            for (int i = 0; i < gridSize; i++)
+            for (i = 0; i < gridSize; i++)
             {
-                for (int j = 0; j < gridSize; i++)
+                for (j = 0; j < gridSize; j++)
                 {
-                    if (copied.boardData[i, j] != 0)
-                        continue;
-                    for (int k = 0; k < gridSize; k++)
+                    if (copied.boardData[i, j] == 0)
                     {
-                        copied.boardData[i, j] = k;
-                        if (copied.isValid())
+                        for (k = 1; k <= gridSize; k++)
                         {
-                            return backtrack(n - 1);
+                            copied.boardData[i, j] = k;
+                            if (copied.isValid() && backtrack(n - 1))
+                            {
+                                return true;
+                            }
                         }
+                        copied.boardData[i, j] = 0;
+                        return false;
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
             }
-
             return false;
         }
 
