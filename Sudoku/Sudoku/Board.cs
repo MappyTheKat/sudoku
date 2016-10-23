@@ -47,14 +47,6 @@ namespace Sudoku
             return a;
         }
 
-        public void solve()
-        {
-            Console.WriteLine("solving started");
-            BacktrackingModule mb = new BacktrackingModule(this);
-            mb.solve();
-            Console.WriteLine("Solving completed");
-        }
-
         public bool isValid()
         {
             //check wether board is valid
