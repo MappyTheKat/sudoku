@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sudoku;
 
 namespace Sudoku.Modules
 {
@@ -71,6 +72,7 @@ namespace Sudoku.Modules
                         for (k = 1; k <= gridSize; k++)
                         {
                             copied.boardData[i, j] = k;
+                            //todo: presentation here
                             if (copied.isValid() && backtrack(n - 1))
                             {
                                 return true;
