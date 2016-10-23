@@ -129,9 +129,9 @@ namespace Sudoku
 
         }
 
-        public Board Clone()
+        public Board Copy()
         {
-            return this.Clone();
+            return ((ICloneable)this).Clone() as Board;
         }
 
         object ICloneable.Clone()
