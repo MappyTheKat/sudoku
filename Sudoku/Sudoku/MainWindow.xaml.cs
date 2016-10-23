@@ -120,6 +120,7 @@ namespace Sudoku
             xGridPuzzleBoard.Children.Clear();
             xGridPuzzleBoard.ColumnDefinitions.Clear();
             xGridPuzzleBoard.RowDefinitions.Clear();
+            textGridReference.Clear();
             int poweredsize = size * size;
             // 크기에 맞는 새로운 퍼즐 그리드를 생성한다.
             for (int i = 0; i < poweredsize; i++)
@@ -138,8 +139,8 @@ namespace Sudoku
                     border.Child = textGrid;
                     textGridReference.Add(textGrid);
                     xGridPuzzleBoard.Children.Add(border);
-                    border.SetValue(Grid.ColumnProperty, j);
-                    border.SetValue(Grid.RowProperty, k);
+                    border.SetValue(Grid.ColumnProperty, k);
+                    border.SetValue(Grid.RowProperty, j);
                 }
             }
         }
@@ -153,7 +154,7 @@ namespace Sudoku
 
         void PresentBoard(string boardString)
         {
-            var target = boardString.Trim().Split();
+            var target = boardString.Trim().Replace("\n", " ").Replace("  ", " ").Split();
             var size = textGridReference.Count;
             for (int i = 0; i < size; i++)
             {
@@ -168,7 +169,10 @@ namespace Sudoku
             StringBuilder sb = new StringBuilder();
             foreach(var targetGrid in textGridReference)
             {
-                sb.Append(targetGrid.Children[0].GetValue(TextBox.TextProperty) + " ");
+                string a = (string) targetGrid.Children[0].GetValue(TextBox.TextProperty);
+                if (a.CompareTo("") == 0)
+                    a = "0";
+                sb.Append(a + " ");
             }
             return sb.ToString();
         }
@@ -176,8 +180,19 @@ namespace Sudoku
         void SolveBacktrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine(board.ToString());
+            Console.WriteLine("valid board?: " + board.isValid());
             BacktrackingModule bm = new BacktrackingModule(board);
+            if (bm.solve())
+            {
+                board = bm.GetSolution();
+                PresentBoard(board.ToString());
+            }
+                
+            else
+            {
+                Console.WriteLine("failed to solve");
+            }
+            Console.WriteLine(board.ToString());
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
             return;

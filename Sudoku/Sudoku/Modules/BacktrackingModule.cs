@@ -50,6 +50,12 @@ namespace Sudoku.Modules
             return backtrack(zero);
         }
 
+        public Board GetSolution()
+        {
+            //clone_to_original();
+            return copied;
+        }
+
         public bool backtrack(int n)
         {
             int i, j, k;
