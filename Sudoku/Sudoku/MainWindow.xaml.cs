@@ -159,6 +159,8 @@ namespace Sudoku
             for (int i = 0; i < size; i++)
             {
                 var targetGrid = textGridReference[i];
+                if (target[i].CompareTo("0") == 0)
+                    target[i] = "";
                 targetGrid.Children[0].SetValue(TextBox.TextProperty, target[i]);
             }
         }
