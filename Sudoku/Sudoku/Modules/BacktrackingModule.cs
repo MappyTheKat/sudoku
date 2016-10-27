@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Sudoku.Modules
 {
@@ -32,7 +33,7 @@ namespace Sudoku.Modules
             gridSize = b.gridSize;
         }
 
-        public bool solve()
+        public async Task<bool> solve()
         {
             if (!original.isValid())
             {
@@ -40,18 +41,23 @@ namespace Sudoku.Modules
                 return false;
             }
             copied = new Board(original.ToString());
-            return backtrack(copied.count_zero());
+            return await BackTrack(copied.count_zero());
         }
 
         public Board GetSolution()
         {
             return copied;
         }
+        public async Task<bool> BackTrack(int i)
+        {
+            var b = await Dispatcher.CurrentDispatcher.InvokeAsync<bool>(new Func<bool>(() => backtrack(i)));
+            return b;
+        }
 
         bool backtrack(int n)
         {
             int i, j, k;
-            Int64 count = 0;
+            // Int64 count = 0;
             if (n == 0)
                 return copied.isComplete();
 
@@ -65,16 +71,15 @@ namespace Sudoku.Modules
                         {
                             copied.boardData[i, j] = k;
                             //if(count++ % 100 == 0)
-                                //PrintCall(this, new PresentArgs(i, j, k));
+                            //PrintCall(this, new PresentArgs(i, j, k));
                             if (copied.isValid() && backtrack(n - 1))
                             {
                                 return true;
                             }
-                            // yield return null;
                         }
                         copied.boardData[i, j] = 0;
                         //if (count % 100 == 0)
-                            //PrintCall(this, new PresentArgs(i, j, 0));
+                        //PrintCall(this, new PresentArgs(i, j, 0));
                         return false;
                     }
                 }
@@ -85,7 +90,7 @@ namespace Sudoku.Modules
         // Implementing ISolver interface
         public void Solve()
         {
-            
+
         }
     }
 }

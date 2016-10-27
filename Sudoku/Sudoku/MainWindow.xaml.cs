@@ -42,10 +42,10 @@ namespace Sudoku
             StatusReady(); // 처음에 한번 초기화.
         }
 
-        private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
+        private async void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
             Generator a = new Generator(gridSize * gridSize);
-            Board genb = a.generate(0);
+            Board genb = await a.generate(0);
             PresentBoard(genb.ToString());
         }
 
@@ -69,15 +69,15 @@ namespace Sudoku
             {
                 string[] data = {
             // invalid dummy puzzle Data!"
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n" +
-                "1 2 3 4 5 6 7 8 9\n",
+                "0 0 0 0 0 0 7 0 0\n" +
+                "5 7 8 0 0 0 0 6 0\n" +
+                "0 0 0 2 0 0 0 0 1\n" +
+                "0 0 0 5 0 0 0 9 0\n" +
+                "0 0 0 0 0 1 0 0 6\n" +
+                "9 0 6 0 0 0 4 0 0\n" +
+                "0 3 1 0 0 6 0 0 7\n" +
+                "0 0 0 7 2 0 8 0 0\n" +
+                "0 8 2 0 9 0 0 0 3\n",
 
             // Evil Level..(very hard)
                 "0 0 0 0 0 0 0 0 0\n" +
@@ -157,12 +157,13 @@ namespace Sudoku
             }
         }
 
-        public void xButtonSolveNowPressed(object sender, EventArgs e)
+        public async void xButtonSolveNowPressed(object sender, EventArgs e)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            SolveBacktrack(new Board(ParseInputBox()));
+            await SolveBacktrack(new Board(ParseInputBox()));
             stopwatch.Stop();
+            xTextBlockElapsedTime.Text = stopwatch.Elapsed.ToString();
             Console.WriteLine("Time elapsed: " + stopwatch.Elapsed.ToString());
         }
 
@@ -194,13 +195,14 @@ namespace Sudoku
             return sb.ToString();
         }
 
-        public void SolveBacktrack(Board board)
+        public async Task SolveBacktrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
             Console.WriteLine("valid board?: " + board.isValid());
             BacktrackingModule bm = new BacktrackingModule(board);
             bm.PrintCall += bm_PrintCall;
-            var solved = bm.solve();
+            var solved = await bm.solve();
+            string message = string.Empty;
             if (solved)
             {
                 board = bm.GetSolution();
@@ -209,8 +211,9 @@ namespace Sudoku
 
             else
             {
-                Console.WriteLine("failed to solve");
+                message = ("Failed to solve");
             }
+            SolveEnded(board.isComplete(), message);
             Console.WriteLine(board.ToString());
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
