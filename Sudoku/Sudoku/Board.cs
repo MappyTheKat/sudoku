@@ -10,24 +10,32 @@ namespace Sudoku
     public class Board : ICloneable
     {
         public int[,] boardData; // 0 은 빈칸
-        public int gridSize; // 작은 네모칸의 사이즈
+        public int gridSize = 0; // 작은 네모칸의 사이즈
 
         public Board(string str)
         {
+            int[] BoardSize = {9, 16, 25, 36, 49};
             string[] parsed = str.Trim().Replace("\n", "").Split();
-            if (parsed.Length != 81)
+            
+            for(int i = 0; i < BoardSize.Length; i++)
+            {
+                if(parsed.Length == BoardSize[i] * BoardSize[i]) {
+                    gridSize = BoardSize[i];
+                    break;
+                }
+            }
+            if (gridSize == 0)
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
             }
 
-            boardData = new int[9, 9];
-            gridSize = 9;
+            boardData = new int[gridSize, gridSize];
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < gridSize; i++)
             {
-                for (int j = 0; j < 9; j++)
+                for (int j = 0; j < gridSize; j++)
                 {
-                    boardData[i, j] = Int32.Parse(parsed[i * 9 + j]);
+                    boardData[i, j] = Int32.Parse(parsed[i * gridSize + j]);
                 }
             }
         }
@@ -109,15 +117,7 @@ namespace Sudoku
         public bool isComplete()
         // check whether board is completed
         {
-            if (!isValid())
-                return false;
-
-            int sum = 0;
-            foreach (int i in boardData)
-            {
-                sum += i;
-            }
-            return sum == (gridSize + 1) * gridSize / 2 * gridSize;
+            return count_zero() == 0 && isValid();
         }
 
         public int count_zero()
