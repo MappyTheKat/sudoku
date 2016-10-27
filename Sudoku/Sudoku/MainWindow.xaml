@@ -40,6 +40,7 @@
                         </ComboBox.Items>
                     </ComboBox>
                     <Button x:Name="xButtonSolveNow">풀어</Button>
+                    <Button x:Name="xButtonRandomGenerate">랜덤으로 만들어라</Button>
                 </StackPanel>
             </StackPanel>
         </Border>

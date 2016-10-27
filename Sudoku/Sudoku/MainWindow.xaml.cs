@@ -38,6 +38,14 @@ namespace Sudoku
             xComboBoxSelectPuzzleSize.SelectionChanged += xComboBoxGridsizeSelectChanged;
             xComboBoxSelectSampleInput.SelectionChanged += xComboBoxSampleInputChanged;
             xButtonSolveNow.Click += xButtonSolveNowPressed;
+            xButtonRandomGenerate.Click += xButtonRandomGeneratePressed;
+        }
+
+        private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
+        {
+            Generator a = new Generator(gridSize * gridSize);
+            Board genb = a.generate();
+            PresentBoard(genb.ToString());
         }
 
         void xComboBoxGridsizeSelectChanged(object sender, EventArgs e)
@@ -70,16 +78,16 @@ namespace Sudoku
                 "1 2 3 4 5 6 7 8 9\n" +
                 "1 2 3 4 5 6 7 8 9\n",
 
-            // valid original dummy puzzle data!
-                "6 9 3 7 2 4 5 1 8\n" +
-                "1 2 7 8 5 9 3 6 4\n" +
-                "4 8 5 3 1 6 9 2 7\n" +
-                "5 6 9 4 8 2 7 3 1\n" +
-                "3 7 8 5 6 1 4 9 2\n" +
-                "2 1 4 9 7 3 8 5 6\n" +
-                "8 4 2 1 3 5 6 7 9\n" +
-                "7 5 6 2 9 8 1 4 3\n" +
-                "9 3 1 6 4 7 2 8 5\n",
+            // Evil Level..(very hard)
+                "0 0 0 0 0 0 0 0 0\n" +
+                "5 0 8 0 0 0 0 0 0\n" +
+                "0 0 0 2 0 0 0 9 0\n" +
+                "0 0 0 5 0 0 0 9 0\n" +
+                "0 0 0 0 0 1 0 0 6\n" +
+                "9 0 6 0 0 0 4 0 0\n" +
+                "0 3 1 0 0 6 0 0 7\n" +
+                "0 0 0 7 2 0 8 0 0\n" +
+                "0 8 2 0 9 0 0 0 3\n",
 
             // valid punched dummy puzzle data!
                 "0 0 0 0 2 4 5 1 8\n" +
