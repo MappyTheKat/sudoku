@@ -160,7 +160,7 @@ namespace Sudoku
             Console.WriteLine("Time elapsed: " + ts.ToString());
         }
 
-        public void PresentBoard(string boardString)
+        void PresentBoard(string boardString)
         {
             var target = boardString.Trim().Replace("\n", " ").Replace("  ", " ").Split();
             var size = textGridReference.Count;

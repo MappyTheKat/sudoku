@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Sudoku;
 
 namespace Sudoku.Modules
 {
@@ -74,8 +73,11 @@ namespace Sudoku.Modules
                         for (k = 1; k <= gridSize; k++)
                         {
                             copied.boardData[i, j] = k;
+<<<<<<< HEAD
                             if(count++ % 100 == 0)
                                 //PrintCall(this, new PresentArgs(i, j, k));
+=======
+>>>>>>> parent of f2d0cb0... commit for sync
                             if (copied.isValid() && backtrack(n - 1))
                             {
                                 return true;
