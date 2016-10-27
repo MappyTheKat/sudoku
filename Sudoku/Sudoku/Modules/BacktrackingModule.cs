@@ -11,7 +11,7 @@ namespace Sudoku.Modules
         public event EventHandler<PresentArgs> PrintCall;
 
         Board original;
-        Board copied;
+        Board copied = null;
         int gridSize;
 
         public class PresentArgs : EventArgs
@@ -29,14 +29,7 @@ namespace Sudoku.Modules
         public BacktrackingModule(Board b)
         {
             original = b;
-            copied = new Board(b.ToString());
-            //copied = b.Copy();
-            gridSize = copied.gridSize;
-        }
-
-        public void clone_to_original()
-        {
-            original = copied.Copy();
+            gridSize = b.gridSize;
         }
 
         public bool solve()
@@ -46,18 +39,16 @@ namespace Sudoku.Modules
                 Console.WriteLine("unsolvable puzzle: original data Invalid!");
                 return false;
             }
-            int zero = copied.count_zero();
-            Console.WriteLine(zero);
-            return backtrack(zero);
+            copied = new Board(original.ToString());
+            return backtrack(copied.count_zero());
         }
 
         public Board GetSolution()
         {
-            //clone_to_original();
             return copied;
         }
 
-        public bool backtrack(int n)
+        bool backtrack(int n)
         {
             int i, j, k;
             Int64 count = 0;

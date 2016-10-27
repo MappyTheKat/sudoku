@@ -44,7 +44,7 @@ namespace Sudoku
         private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
             Generator a = new Generator(gridSize * gridSize);
-            Board genb = a.generate();
+            Board genb = a.generate(0);
             PresentBoard(genb.ToString());
         }
 
@@ -55,9 +55,9 @@ namespace Sudoku
             {
                 gridSize = 3;
                 var value = comboBox.SelectedItem as ComboBoxItem;
-                int gridsize = 3;
-                int.TryParse(value.Content.ToString().Substring(0, 1), out gridsize); // Selection의 첫글자만 파싱..
-                GenerateGrid(gridsize);
+                //int gridsize = 3;
+                int.TryParse(value.Content.ToString().Substring(0, 1), out gridSize); // Selection의 첫글자만 파싱..
+                GenerateGrid(gridSize);
             }
         }
 
@@ -160,12 +160,10 @@ namespace Sudoku
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Board board = new Board(ParseInputBox());
-            SolveBacktrack(board);
+            SolveBacktrack(new Board(ParseInputBox()));
             Thread.Sleep(1);
             stopwatch.Stop();
-            TimeSpan ts = stopwatch.Elapsed;
-            Console.WriteLine("Time elapsed: " + ts.ToString());
+            Console.WriteLine("Time elapsed: " + stopwatch.Elapsed.ToString());
         }
 
         void PresentBoard(string boardString)
