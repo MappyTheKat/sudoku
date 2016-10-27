@@ -73,21 +73,15 @@ namespace Sudoku.Modules
                         for (k = 1; k <= gridSize; k++)
                         {
                             copied.boardData[i, j] = k;
-<<<<<<< HEAD
-<<<<<<< HEAD
-                            if(count++ % 100 == 0)
+                            //if(count++ % 100 == 0)
                                 //PrintCall(this, new PresentArgs(i, j, k));
-=======
->>>>>>> parent of f2d0cb0... commit for sync
-=======
->>>>>>> parent of f2d0cb0... commit for sync
                             if (copied.isValid() && backtrack(n - 1))
                             {
                                 return true;
                             }
                         }
                         copied.boardData[i, j] = 0;
-                        if (count % 100 == 0)
+                        //if (count % 100 == 0)
                             //PrintCall(this, new PresentArgs(i, j, 0));
                         return false;
                     }
