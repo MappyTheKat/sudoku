@@ -59,7 +59,7 @@ namespace Sudoku
                 bm = new BacktrackingModule(newBoard);
             }
             while (!bm.solve());
-            
+
             // TODO: implement digging holes here.
 
 

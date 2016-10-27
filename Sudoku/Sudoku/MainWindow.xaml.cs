@@ -39,6 +39,7 @@ namespace Sudoku
             xComboBoxSelectSampleInput.SelectionChanged += xComboBoxSampleInputChanged;
             xButtonSolveNow.Click += xButtonSolveNowPressed;
             xButtonRandomGenerate.Click += xButtonRandomGeneratePressed;
+            StatusReady(); // 처음에 한번 초기화.
         }
 
         private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
@@ -64,7 +65,7 @@ namespace Sudoku
         void xComboBoxSampleInputChanged(object sender, EventArgs e)
         {
             var comboBox = sender as ComboBox;
-            if(comboBox != null)
+            if (comboBox != null)
             {
                 string[] data = {
             // invalid dummy puzzle Data!"
@@ -81,7 +82,7 @@ namespace Sudoku
             // Evil Level..(very hard)
                 "0 0 0 0 0 0 0 0 0\n" +
                 "5 0 8 0 0 0 0 0 0\n" +
-                "0 0 0 2 0 0 0 9 0\n" +
+                "0 0 0 2 0 0 0 0 1\n" +
                 "0 0 0 5 0 0 0 9 0\n" +
                 "0 0 0 0 0 1 0 0 6\n" +
                 "9 0 6 0 0 0 4 0 0\n" +
@@ -146,7 +147,7 @@ namespace Sudoku
                 {
                     var border = new Border() { BorderThickness = new Thickness(1) };
                     var textGrid = new Grid();
-                    textGrid.Children.Add(new TextBox() { Text = "0", FontSize = 30, TextAlignment = TextAlignment.Center});
+                    textGrid.Children.Add(new TextBox() { Text = "0", FontSize = 30, TextAlignment = TextAlignment.Center });
                     border.Child = textGrid;
                     textGridReference.Add(textGrid);
                     xGridPuzzleBoard.Children.Add(border);
@@ -156,15 +157,15 @@ namespace Sudoku
             }
         }
 
-        void xButtonSolveNowPressed(object sender, EventArgs e)
+        public void xButtonSolveNowPressed(object sender, EventArgs e)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             SolveBacktrack(new Board(ParseInputBox()));
-            Thread.Sleep(1);
             stopwatch.Stop();
             Console.WriteLine("Time elapsed: " + stopwatch.Elapsed.ToString());
         }
+
 
         void PresentBoard(string boardString)
         {
@@ -183,9 +184,9 @@ namespace Sudoku
         {
             var size = xGridPuzzleBoard.Children.Count;
             StringBuilder sb = new StringBuilder();
-            foreach(var targetGrid in textGridReference)
+            foreach (var targetGrid in textGridReference)
             {
-                string a = (string) targetGrid.Children[0].GetValue(TextBox.TextProperty);
+                string a = (string)targetGrid.Children[0].GetValue(TextBox.TextProperty);
                 if (a.CompareTo("") == 0)
                     a = "0";
                 sb.Append(a + " ");
@@ -193,18 +194,19 @@ namespace Sudoku
             return sb.ToString();
         }
 
-        void SolveBacktrack(Board board)
+        public void SolveBacktrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
             Console.WriteLine("valid board?: " + board.isValid());
             BacktrackingModule bm = new BacktrackingModule(board);
             bm.PrintCall += bm_PrintCall;
-            if (bm.solve())
+            var solved = bm.solve();
+            if (solved)
             {
                 board = bm.GetSolution();
                 PresentBoard(board.ToString());
             }
-                
+
             else
             {
                 Console.WriteLine("failed to solve");
@@ -212,17 +214,42 @@ namespace Sudoku
             Console.WriteLine(board.ToString());
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
-            return;
+            return ;
         }
 
         void bm_PrintCall(object sender, BacktrackingModule.PresentArgs e)
-            // when a solving module sends a present signal.
+        // when a solving module sends a present signal.
         {
             //PresentBoard(e.boardString);
             //Thread.Sleep(1);
             textGridReference[e.pos.Item1 * gridSize + e.pos.Item2].Children[0].SetValue(TextBox.TextProperty, e.value.ToString());
             //Console.WriteLine("it has called...");
             //Environment.Exit(0);
+        }
+
+        void SolveEnded(bool isValid, string message)
+        {
+            MessageBox.Show(isValid ? "성공" : "실패 " + ":" + message);
+            StatusReady();
+        }
+
+        public void StatusReady()
+        {
+            // 상태를 대기 로 표시한다.
+            xTextBlockStatus.Text = "대기";
+            xComboBoxSelectPuzzleSize.IsEnabled = true;
+            xComboBoxSelectSampleInput.IsEnabled = true;
+            xButtonSolveNow.IsEnabled = true;
+            xButtonRandomGenerate.IsEnabled = true;
+        }
+
+        public void StatusRunning()
+        {
+            xTextBlockStatus.Text = "문제 해결중";
+            xComboBoxSelectPuzzleSize.IsEnabled = false;
+            xComboBoxSelectSampleInput.IsEnabled = false;
+            xButtonSolveNow.IsEnabled = false;
+            xButtonRandomGenerate.IsEnabled = false;
         }
     }
 }

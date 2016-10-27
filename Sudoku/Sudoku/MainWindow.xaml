@@ -11,38 +11,56 @@
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <Border BorderThickness="5">
+        <Border BorderThickness="3" BorderBrush="CornflowerBlue">
             <Grid x:Name="xGridPuzzleBoard">
-                <TextBox>FUCK</TextBox>
+                <TextBox>AAAA</TextBox>
             </Grid>
         </Border>
-        <Border BorderThickness="5" Grid.Column="1">
-            <StackPanel x:Name="xStackPanelOptions"  >
-                <StackPanel Orientation="Horizontal" >
-                    <TextBlock FontSize="20">문제 크기 설정</TextBlock>
-                    <ComboBox x:Name="xComboBoxSelectPuzzleSize" HorizontalAlignment="Right" SelectedIndex="0" SelectionChanged="xComboBoxGridsizeSelectChanged">
-                        <ComboBox.Items>
-                            <ComboBoxItem>3</ComboBoxItem>
-                            <ComboBoxItem>4</ComboBoxItem>
-                            <ComboBoxItem>5</ComboBoxItem>
-                            <ComboBoxItem>6(Maybe Impossible?)</ComboBoxItem>
-                            <ComboBoxItem>7(Maybe Impossible?)</ComboBoxItem>
-                        </ComboBox.Items>
-                    </ComboBox>
-                    <TextBlock FontSize="20">예제 입력</TextBlock>
-                    <ComboBox x:Name="xComboBoxSelectSampleInput" SelectedIndex="0">
-                        <ComboBox.Items>
-                            <ComboBoxItem>1</ComboBoxItem>
-                            <ComboBoxItem>2</ComboBoxItem>
-                            <ComboBoxItem>3</ComboBoxItem>
-                            <ComboBoxItem>4</ComboBoxItem>
-                            <ComboBoxItem>5</ComboBoxItem>
-                        </ComboBox.Items>
-                    </ComboBox>
-                    <Button x:Name="xButtonSolveNow">풀어</Button>
-                    <Button x:Name="xButtonRandomGenerate">랜덤으로 만들어라</Button>
+        <Border BorderThickness="3" Grid.Column="1" BorderBrush="Black">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel x:Name="xStackPanelOptions">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="20" Padding="0,0,20,0">문제 크기 설정</TextBlock>
+                        <ComboBox x:Name="xComboBoxSelectPuzzleSize" HorizontalAlignment="Right" SelectedIndex="0" SelectionChanged="xComboBoxGridsizeSelectChanged">
+                            <ComboBox.Items>
+                                <ComboBoxItem>3</ComboBoxItem>
+                                <ComboBoxItem>4</ComboBoxItem>
+                                <ComboBoxItem>5</ComboBoxItem>
+                                <ComboBoxItem>6(Maybe Impossible?)</ComboBoxItem>
+                                <ComboBoxItem>7(Maybe Impossible?)</ComboBoxItem>
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock FontSize="20" Padding="0,0,20,0">예제 입력</TextBlock>
+                        <ComboBox x:Name="xComboBoxSelectSampleInput" SelectedIndex="0">
+                            <ComboBox.Items>
+                                <ComboBoxItem>1</ComboBoxItem>
+                                <ComboBoxItem>2</ComboBoxItem>
+                                <ComboBoxItem>3</ComboBoxItem>
+                                <ComboBoxItem>4</ComboBoxItem>
+                                <ComboBoxItem>5</ComboBoxItem>
+                            </ComboBox.Items>
+                        </ComboBox>
+
+                    </StackPanel>
+                    <Button Margin="0,10,0,0" x:Name="xButtonSolveNow">풀어</Button>
+                    <Button Margin="0,10,0,0" x:Name="xButtonRandomGenerate">랜덤으로 만들어라</Button>
                 </StackPanel>
-            </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock FontSize="20">상태 :</TextBlock>
+                    <TextBlock FontSize="20" x:Name="xTextBlockStatus">대기</TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <TextBlock FontSize="20">걸린 시간:</TextBlock>
+                    <TextBlock FontSize="20" x:Name="xTextBlockElapsedTime">00:00:00</TextBlock>
+                </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </Window>

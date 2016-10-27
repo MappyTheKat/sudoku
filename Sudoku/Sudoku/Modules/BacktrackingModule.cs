@@ -70,6 +70,7 @@ namespace Sudoku.Modules
                             {
                                 return true;
                             }
+                            // yield return null;
                         }
                         copied.boardData[i, j] = 0;
                         //if (count % 100 == 0)
