@@ -28,24 +28,24 @@ namespace Sudoku
 
         public Board generate(int holeNumber)
         {
+            const int NUM_MAX = 12; // number of random generated numbers
+
             Board newBoard = initBoard.Copy();
             BacktrackingModule bm;
-            const int NUM_MAX = 12;
-            //lasvegas algorithms.
             List<int> selected = new List<int>();
             Random r = new Random();
-            int numberSelect;
-            int inputPosition;
-            do
+
+            //lasvegas algorithms.
+            do // while bm has a solution
             {
-                do
+                do // while newBoard got valid puzzle
                 {
-                    numberSelect = NUM_MAX;
+                    int numberSelect = NUM_MAX;
                     selected.Clear();
                     newBoard = initBoard.Copy();
                     while (numberSelect > 0)
                     {
-                        inputPosition = r.Next(1, gridSize * gridSize);
+                        int inputPosition = r.Next(1, gridSize * gridSize);
                         if (!selected.Contains(inputPosition))
                         {
                             selected.Add(inputPosition);
@@ -60,7 +60,7 @@ namespace Sudoku
             }
             while (!bm.solve());
             
-            //digging holes
+            // TODO: implement digging holes here.
 
 
             return bm.GetSolution();
