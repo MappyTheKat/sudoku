@@ -8,35 +8,35 @@ namespace Sudoku.Modules
 {
     public class BacktrackingModule : ISolver
     {
+        public event EventHandler<PresentArgs> PrintCall;
+
         Board original;
         Board copied;
         int gridSize;
+
+        public class PresentArgs : EventArgs
+        {
+            public Tuple<int, int> pos { get; set; }
+            public int value { get; set; }
+
+            public PresentArgs(int i, int j, int k)
+            {
+                pos = new Tuple<int, int>(i, j);
+                value = k;
+            }
+        }
 
         public BacktrackingModule(Board b)
         {
             original = b;
             copied = new Board(b.ToString());
+            //copied = b.Copy();
             gridSize = copied.gridSize;
-        }
-
-        private int count_zero()
-        //copied 내부의 0 개수 반환
-        {
-            int c = 0;
-            for (int i = 0; i < gridSize; i++)
-            {
-                for (int j = 0; j < gridSize; j++)
-                {
-                    if (copied.boardData[i, j] == 0)
-                        c++;
-                }
-            }
-            return c;
         }
 
         public void clone_to_original()
         {
-            original = copied.Clone();
+            original = copied.Copy();
         }
 
         public bool solve()
@@ -46,32 +46,47 @@ namespace Sudoku.Modules
                 Console.WriteLine("unsolvable puzzle: original data Invalid!");
                 return false;
             }
-            int zero = count_zero();
+            int zero = copied.count_zero();
+            Console.WriteLine(zero);
             return backtrack(zero);
+        }
+
+        public Board GetSolution()
+        {
+            //clone_to_original();
+            return copied;
         }
 
         public bool backtrack(int n)
         {
+            int i, j, k;
+            Int64 count = 0;
             if (n == 0)
-                return true;
+                return copied.isComplete();
 
-            for (int i = 0; i < gridSize; i++)
+            for (i = 0; i < gridSize; i++)
             {
-                for (int j = 0; j < gridSize; i++)
+                for (j = 0; j < gridSize; j++)
                 {
-                    if (copied.boardData[i, j] != 0)
-                        continue;
-                    for (int k = 0; k < gridSize; k++)
+                    if (copied.boardData[i, j] == 0)
                     {
-                        copied.boardData[i, j] = k;
-                        if (copied.isValid())
+                        for (k = 1; k <= gridSize; k++)
                         {
-                            return backtrack(n - 1);
+                            copied.boardData[i, j] = k;
+                            //if(count++ % 100 == 0)
+                                //PrintCall(this, new PresentArgs(i, j, k));
+                            if (copied.isValid() && backtrack(n - 1))
+                            {
+                                return true;
+                            }
                         }
+                        copied.boardData[i, j] = 0;
+                        //if (count % 100 == 0)
+                            //PrintCall(this, new PresentArgs(i, j, 0));
+                        return false;
                     }
                 }
             }
-
             return false;
         }
 

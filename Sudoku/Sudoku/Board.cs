@@ -14,7 +14,7 @@ namespace Sudoku
 
         public Board(string str)
         {
-            string[] parsed = str.Trim().Replace(" \n", "").Split();
+            string[] parsed = str.Trim().Replace("\n", "").Split();
             if (parsed.Length != 81)
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
@@ -47,14 +47,6 @@ namespace Sudoku
             return a;
         }
 
-        public void solve()
-        {
-            Console.WriteLine("solving started");
-            BacktrackingModule mb = new BacktrackingModule(this);
-            mb.solve();
-            Console.WriteLine("Solving completed");
-        }
-
         public bool isValid()
         {
             //check wether board is valid
@@ -70,8 +62,7 @@ namespace Sudoku
                         if (boardData[i, k] == j)
                             cnt++;
                     }
-                    //Console.WriteLine("row:{0}, checking {1}", i, j);
-                    if (cnt != 1)
+                    if (cnt > 1)
                         return false;
                 }
             }
@@ -87,7 +78,7 @@ namespace Sudoku
                         if (boardData[k, i] == j)
                             cnt++;
                     }
-                    if (cnt != 1)
+                    if (cnt > 1)
                         return false;
                 }
             }
@@ -107,8 +98,7 @@ namespace Sudoku
                         if (boardData[row + (k / width), col + (k % width)] == j)
                             cnt++;
                     }
-                    //Console.WriteLine("row:{0}, col:{1} checking {2} cnt:{3}", row, col, j, cnt);
-                    if (cnt != 1)
+                    if (cnt > 1)
                         return false;
                 }
             }
@@ -123,14 +113,23 @@ namespace Sudoku
                 return false;
 
             int sum = 0;
-            for (int i = 0; i < gridSize; i++)
+            foreach (int i in boardData)
             {
-                for (int j = 0; j < gridSize; j++)
-                {
-                    sum += boardData[i, j];
-                }
+                sum += i;
             }
             return sum == (gridSize + 1) * gridSize / 2 * gridSize;
+        }
+
+        public int count_zero()
+        //copied 내부의 0 개수 반환
+        {
+            int c = 0;
+            foreach (int i in boardData)
+            {
+                if (i == 0)
+                    c++;
+            }
+            return c;
         }
 
         // 기본 생성자. Clone을 구현하기 위해서 만든 것이니 웬만하면 호출하지 맙시다.
@@ -139,9 +138,9 @@ namespace Sudoku
 
         }
 
-        public Board Clone()
+        public Board Copy()
         {
-            return this.Clone();
+            return ((ICloneable)this).Clone() as Board;
         }
 
         object ICloneable.Clone()
