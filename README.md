@@ -37,6 +37,13 @@
 * https://kjell.haxx.se/sudoku/  
 * http://www.sudokuwiki.org/Getting_Started
 * http://sudopedia.enjoysudoku.com/
+* http://zhangroup.aporc.org/images/files/Paper_3485.pdf
 
 ## Jenkins-github 연동 관련
 * http://yookeun.github.io/tools/2014/09/18/jenkins-github/
+
+## VS Test Instruction
+* https://msdn.microsoft.com/ko-kr/library/ms182486.aspx
+
+## Valgrind
+* http://valgrind.org/docs/manual/QuickStart.html
