@@ -45,6 +45,7 @@ namespace Sudoku
         private async void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
             Generator a = new Generator(gridSize * gridSize);
+            Console.WriteLine("Generate");
             Board genb = await a.generate(0);
             PresentBoard(genb.ToString());
         }
