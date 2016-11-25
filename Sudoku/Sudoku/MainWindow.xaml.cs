@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 
 using Sudoku.Modules;
 using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace Sudoku
 {
@@ -27,10 +28,29 @@ namespace Sudoku
         List<Grid> textGridReference = new List<Grid>();
         int gridSize;
 
+        DispatcherTimer dt = new DispatcherTimer();
+        Stopwatch stopWatch = new Stopwatch();
+
+        private BacktrackingModule bm = null;
+
+        private Board board = null;
+
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+            dt.Interval = new TimeSpan(0, 0, 0, 0, 1); // Tick 1 ms
+            dt.Tick += new EventHandler(dispatcherTimer_Tick);
+        }
+
+        void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            if (stopWatch.IsRunning)
+            {
+                xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
+                // StopWatch가 돌고 있을때는 문제를 풀고 있을 것이므로 문제의 결과를 받아와서 결과 화면에 적을 수 있어야 한다.
+                PresentBoard(board.ToString());
+            }
         }
 
         void MainWindow_Loaded(object sender, EventArgs e)
@@ -160,16 +180,33 @@ namespace Sudoku
 
         public void xButtonSolveNowPressed(object sender, EventArgs e)
         {
-            Solver solver;
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            solver = new Solver(new Board(ParseInputBox()));
-            solver.SolveEnded += sv_SolveEnded;
-            solver.PresentBoard += sv_PresentBoard;
-            solver.solve(1);
-            stopwatch.Stop();
-            xTextBlockElapsedTime.Text = stopwatch.Elapsed.ToString();
-            Console.WriteLine("Time elapsed: " + stopwatch.Elapsed.ToString());
+            stopWatch = new Stopwatch();
+            stopWatch.Start();
+            // 여기를 Task로 띄워서 날려보내야 한다.
+            board = new Board(ParseInputBox());
+            var task = Dispatcher.BeginInvoke(new Action(() => SolveBacktrack(board)));
+            task.Completed += SolveCompleted;
+            //xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
+            //Console.WriteLine("Time elapsed: " + stopWatch.Elapsed.ToString());
+        }
+
+        public void SolveCompleted(object sender, EventArgs e)
+        {
+            stopWatch.Stop(); // StopWatch를 멈춘다.
+
+            xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString(); // 경과 시간을 적는다.
+
+            string message = string.Empty;
+            if (bm.IsSolved)
+            {
+                board = bm.GetSolution();
+                PresentBoard(board.ToString()); // 마지막으로 결과를 다 적고.
+            }
+            else
+            {
+                message = ("Failed to solve");
+            }
+            SolveEnded(board.isComplete(), message);
         }
 
         void PresentBoard(string boardString)
@@ -199,7 +236,19 @@ namespace Sudoku
             return sb.ToString();
         }
 
-        void sv_PrintCall(object sender, BacktrackingModule.PresentArgs e)
+        public void SolveBacktrack(Board board)
+        {
+            Console.WriteLine("hello, Cruel World!");
+            Console.WriteLine("valid board?: " + board.isValid());
+            bm = new BacktrackingModule(board);
+            bm.solve();
+            Console.WriteLine(board.ToString());
+            Console.WriteLine("valid : " + board.isValid());
+            Console.WriteLine("complete : " + board.isComplete());
+            return;
+        }
+
+        void bm_PrintCall(object sender, BacktrackingModule.PresentArgs e)
         // when a solving module sends a present signal.
         {
             //PresentBoard(e.boardString);

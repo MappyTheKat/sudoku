@@ -15,6 +15,8 @@ namespace Sudoku.Modules
         Board copied = null;
         int gridSize;
 
+        public bool IsSolved;
+
         public class PresentArgs : EventArgs
         {
             public Tuple<int, int> pos { get; set; }
@@ -41,7 +43,8 @@ namespace Sudoku.Modules
                 return false;
             }
             copied = new Board(original.ToString());
-            return backtrack(copied.count_zero());
+            IsSolved = backtrack(copied.count_zero());
+            return IsSolved;
         }
 
         public Board GetSolution()
