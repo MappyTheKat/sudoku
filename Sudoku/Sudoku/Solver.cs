@@ -29,36 +29,48 @@ namespace Sudoku
         public void solve(int solvingMethod)
             //solving method 0 : backtraking,  1 : heuristic
         {
+            List<Thread> threads = new List<Thread>();
+            string message = "";
             if (solvingMethod == 0)
                 SolveBacktrack();
             if (solvingMethod == 1)
             {
                 //do some hueristic...
                 bool done = false;
-                var thread0 = new Thread(
+                threads.Add(new Thread(
                     () =>
                     {
                         fiveseconds();
+                        message = "timed out after " + 5 + " seconds";
                         done = true;
-                    });
-                var thread1 = new Thread(
+                    }));
+                threads.Add(new Thread(
                     () =>
                     {
                         SolveBacktrack();
-                        Console.WriteLine("done...");
+                        message = "backtracking completed";
                         done = true;
-                    });
-                thread0.Start();
-                thread1.Start();
+                    }));
+                threads.Add(new Thread(
+                    () =>
+                    {
+                        SingleModule sm = new SingleModule(originalBoard);
+                        if (sm.Solve())
+                            done = true;
+                        message = "single completed";
+                    }));
+                foreach (var t in threads)
+                    t.Start();
                 while (!done)
                 {
+                    //implement job scheduler...
                     Console.WriteLine("waiting for completing");
                     Thread.Sleep(30);
                 }
-                thread0.Abort();
-                thread1.Abort();
+                foreach (var t in threads)
+                    t.Abort();
             }
-            string message = solution.isComplete() ? "" : "Failed to solve";
+            
             SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
         }
 

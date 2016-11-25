@@ -21,19 +21,36 @@ namespace Sudoku.Modules
 
         public bool Solve()
         {
-            //naked single
-            for(int i = 0; i < gridSize; i++)
+            var cb = copied.boardData;
+            var ob = original.boardData;
+            
+            List<int>[,] map = drawMap(cb);
+            if (hasSingle(map))
             {
-                for(int j = 0; j < gridSize; j++)
-                {
-                    //implement this...
-                }
+                fillSingle();
+                if (copied.isComplete())
+                    return true;
+                return Solve();
             }
-            //hidden single
+
+            
 
             return false;
         }
 
-        
+        private bool hasSingle(List<int>[,] map)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void fillSingle()
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<int>[,] drawMap(int[,] cb)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
