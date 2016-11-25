@@ -15,6 +15,8 @@ namespace Sudoku.Modules
         Board copied = null;
         int gridSize;
 
+        public bool IsSolved;
+
         public class PresentArgs : EventArgs
         {
             public Tuple<int, int> pos { get; set; }
@@ -33,7 +35,7 @@ namespace Sudoku.Modules
             gridSize = b.gridSize;
         }
 
-        public async Task<bool> solve()
+        public bool solve()
         {
             if (!original.isValid())
             {
@@ -41,17 +43,13 @@ namespace Sudoku.Modules
                 return false;
             }
             copied = new Board(original.ToString());
-            return await BackTrack(copied.count_zero());
+            IsSolved = backtrack(copied.count_zero());
+            return IsSolved;
         }
 
         public Board GetSolution()
         {
             return copied;
-        }
-        public async Task<bool> BackTrack(int i)
-        {
-            var b = await Dispatcher.CurrentDispatcher.InvokeAsync<bool>(new Func<bool>(() => backtrack(i)));
-            return b;
         }
 
         bool backtrack(int n)
