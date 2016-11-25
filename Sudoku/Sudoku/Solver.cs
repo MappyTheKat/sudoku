@@ -10,6 +10,7 @@ namespace Sudoku
 {
     class Solver
     {
+        
         public event EventHandler<SolveEndedArgs> SolveEnded;
         public event EventHandler<PresentBoardArgs> PresentBoard;
         Board originalBoard;
