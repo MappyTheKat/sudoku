@@ -58,7 +58,7 @@ namespace Sudoku
                 while (!newBoard.isValid());
                 bm = new BacktrackingModule(newBoard);
             }
-            while (bm.solve());
+            while (!bm.solve());
 
             // TODO: implement digging holes here.
 
