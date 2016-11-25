@@ -33,14 +33,13 @@ namespace Sudoku
 
         private BacktrackingModule bm = null;
 
-        private Board board = null;
-
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             dt.Interval = new TimeSpan(0, 0, 0, 0, 1); // Tick 1 ms
             dt.Tick += new EventHandler(dispatcherTimer_Tick);
+            dt.Start();
         }
 
         void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -49,7 +48,7 @@ namespace Sudoku
             {
                 xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
                 // StopWatch가 돌고 있을때는 문제를 풀고 있을 것이므로 문제의 결과를 받아와서 결과 화면에 적을 수 있어야 한다.
-                PresentBoard(board.ToString());
+                PresentBoard(bm.copied.ToString());
             }
         }
 
@@ -183,9 +182,12 @@ namespace Sudoku
             stopWatch = new Stopwatch();
             stopWatch.Start();
             // 여기를 Task로 띄워서 날려보내야 한다.
-            board = new Board(ParseInputBox());
-            var task = Dispatcher.BeginInvoke(new Action(() => SolveBacktrack(board)));
-            task.Completed += SolveCompleted;
+            var board = new Board(ParseInputBox());
+            Thread t = new Thread(() => SolveBacktrack(board));
+            t.Start();
+            // var task =  Dispatcher.BeginInvoke(new Action(() => SolveBacktrack(board)));
+            // t.
+            // task.Completed += SolveCompleted;
             //xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
             //Console.WriteLine("Time elapsed: " + stopWatch.Elapsed.ToString());
         }
@@ -196,6 +198,8 @@ namespace Sudoku
 
             xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString(); // 경과 시간을 적는다.
 
+            Board board = null;
+            bool isComplete = false;
             string message = string.Empty;
             if (bm.IsSolved)
             {
@@ -206,7 +210,8 @@ namespace Sudoku
             {
                 message = ("Failed to solve");
             }
-            SolveEnded(board.isComplete(), message);
+            isComplete = bm.IsSolved;
+            SolveEnded(isComplete, message);
         }
 
         void PresentBoard(string boardString)

@@ -11,8 +11,8 @@ namespace Sudoku.Modules
     {
         public event EventHandler<PresentArgs> PrintCall;
 
-        Board original;
-        Board copied = null;
+        public Board original;
+        public Board copied = null;
         int gridSize;
 
         public bool IsSolved;
