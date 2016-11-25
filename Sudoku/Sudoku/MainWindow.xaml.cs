@@ -160,14 +160,19 @@ namespace Sudoku
 
         public async void xButtonSolveNowPressed(object sender, EventArgs e)
         {
+            Solver solver;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            await SolveBacktrack(new Board(ParseInputBox()));
+            solver = new Solver(new Board(ParseInputBox()));
+            solver.SolveEnded += sv_SolveEnded;
+            solver.PresentBoard += sv_PresentBoard;
+            await solver.solve(0);
+            //await SolveBacktrack(new Board(ParseInputBox()));
+            //SolveEnded(board.isComplete(), message);
             stopwatch.Stop();
             xTextBlockElapsedTime.Text = stopwatch.Elapsed.ToString();
             Console.WriteLine("Time elapsed: " + stopwatch.Elapsed.ToString());
         }
-
 
         void PresentBoard(string boardString)
         {
@@ -195,7 +200,7 @@ namespace Sudoku
             }
             return sb.ToString();
         }
-
+        /*
         public async Task SolveBacktrack(Board board)
         {
             Console.WriteLine("hello, Cruel World!");
@@ -220,8 +225,8 @@ namespace Sudoku
             Console.WriteLine("complete : " + board.isComplete());
             return ;
         }
-
-        void bm_PrintCall(object sender, BacktrackingModule.PresentArgs e)
+        */
+        void sv_PrintCall(object sender, BacktrackingModule.PresentArgs e)
         // when a solving module sends a present signal.
         {
             //PresentBoard(e.boardString);
@@ -231,9 +236,15 @@ namespace Sudoku
             //Environment.Exit(0);
         }
 
-        void SolveEnded(bool isValid, string message)
+        void sv_PresentBoard(object sender, PresentBoardArgs e)
         {
-            MessageBox.Show(isValid ? "성공" : "실패 " + ":" + message);
+            PresentBoard(e.boardstring);
+        }
+
+        //void sv_SolveEnded(bool isValid, string message)
+        void sv_SolveEnded(object sender, SolveEndedArgs e)
+        {
+            MessageBox.Show(e.completed ? "성공" : "실패 " + ":" + e.message);
             StatusReady();
         }
 
