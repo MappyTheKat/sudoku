@@ -37,7 +37,7 @@ namespace Sudoku
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
-            dt.Interval = new TimeSpan(0, 0, 0, 0, 1); // Tick 1 ms
+            dt.Interval = new TimeSpan(0, 0, 0, 0, 10); // Tick 10 ms
             dt.Tick += new EventHandler(dispatcherTimer_Tick);
             dt.Start();
         }
@@ -211,7 +211,7 @@ namespace Sudoku
                 message = ("Failed to solve");
             }
             isComplete = bm.IsSolved;
-            SolveEnded(isComplete, message);
+            sv_SolveEnded(null, new SolveEndedArgs(isComplete, message));
         }
 
         void PresentBoard(string boardString)
