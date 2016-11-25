@@ -47,7 +47,15 @@
                                 <ComboBoxItem>5</ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
-
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock FontSize="20" Padding="0,0,20,0">방법 입력</TextBlock>
+                        <ComboBox x:Name="xComboBoxSelectMethod" SelectedIndex="0">
+                            <ComboBox.Items>
+                                <ComboBoxItem>BruteForce</ComboBoxItem>
+                                <ComboBoxItem>Heuristic</ComboBoxItem>
+                            </ComboBox.Items>
+                        </ComboBox>
                     </StackPanel>
                     <Button Margin="0,10,0,0" x:Name="xButtonSolveNow">풀어</Button>
                     <Button Margin="0,10,0,0" x:Name="xButtonRandomGenerate">랜덤으로 만들어라</Button>

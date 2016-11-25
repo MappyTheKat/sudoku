@@ -198,8 +198,11 @@ namespace Sudoku
             solver.SolveEnded += sv_SolveEnded;
             solver.PresentBoard += sv_PresentBoard;
 
+            // 방법 선택. 0 == backtrack, 1 == heuristic
+            var m = xComboBoxSelectMethod.SelectedIndex;
+
             Thread t = new Thread(() => {
-                solver.solve(0);
+                solver.solve(m);
                 });
             t.Start();
         }
