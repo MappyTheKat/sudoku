@@ -11,11 +11,9 @@ namespace Sudoku.Modules
     {
         public event EventHandler<PresentArgs> PrintCall;
 
-        public Board original;
-        public Board copied = null;
+        Board original;
+        Board copied = null;
         int gridSize;
-
-        public bool IsSolved;
 
         public class PresentArgs : EventArgs
         {
@@ -43,8 +41,7 @@ namespace Sudoku.Modules
                 return false;
             }
             copied = new Board(original.ToString());
-            IsSolved = backtrack(copied.count_zero());
-            return IsSolved;
+            return backtrack(copied.count_zero());
         }
 
         public Board GetSolution()
@@ -86,9 +83,10 @@ namespace Sudoku.Modules
         }
 
         // Implementing ISolver interface
-        public void Solve()
+        public bool Solve()
         {
-
+            //not implemented.. 
+            return false;
         }
     }
 }

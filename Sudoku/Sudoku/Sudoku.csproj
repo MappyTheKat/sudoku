@@ -56,9 +56,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Generator.cs" />
+    <Compile Include="Modules\SingleModule.cs" />
     <Compile Include="PuzzleGrid.xaml.cs">
       <DependentUpon>PuzzleGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Solver.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
