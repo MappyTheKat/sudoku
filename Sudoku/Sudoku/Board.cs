@@ -140,7 +140,7 @@ namespace Sudoku
             List<int> ret = new List<int>();
             for(int i = 0; i < gridSize; i++)
             {
-                ret.Add(boardData[i / gridWidth, i % gridWidth]);
+                ret.Add(boardData[i / gridWidth + n * gridWidth, i % gridWidth + m * gridWidth]);
             }
             return ret;
         }

@@ -15,18 +15,6 @@ namespace Sudoku.Modules
 
         public bool IsSolved;
 
-        public class PresentArgs : EventArgs
-        {
-            public Tuple<int, int> pos { get; set; }
-            public int value { get; set; }
-
-            public PresentArgs(int i, int j, int k)
-            {
-                pos = new Tuple<int, int>(i, j);
-                value = k;
-            }
-        }
-
         public BacktrackingModule(Board b)
         {
             original = b;

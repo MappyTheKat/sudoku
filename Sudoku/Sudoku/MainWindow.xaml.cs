@@ -52,7 +52,9 @@ namespace Sudoku
             {
                 xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
                 // StopWatch가 돌고 있을때는 문제를 풀고 있을 것이므로 문제의 결과를 받아와서 결과 화면에 적을 수 있어야 한다.
-                PresentBoard(solver.bm.copied.ToString());
+                if(solver.bm != null)
+                    PresentBoard(solver.bm.copied.ToString());
+                // TODO: 나중에 수행방식별로 바꾸게 하여야함...
             }
             else {
                 dt.Stop();
@@ -67,6 +69,7 @@ namespace Sudoku
             xButtonSolveNow.Click += xButtonSolveNowPressed;
             xButtonRandomGenerate.Click += xButtonRandomGeneratePressed;
             StatusReady(); // 처음에 한번 초기화.
+            xComboBoxSelectSampleInput.SetValue(ComboBox.SelectedIndexProperty, 4);
         }
 
         private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)

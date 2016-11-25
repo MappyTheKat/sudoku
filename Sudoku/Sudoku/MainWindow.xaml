@@ -44,7 +44,7 @@
                                 <ComboBoxItem>2</ComboBoxItem>
                                 <ComboBoxItem>3</ComboBoxItem>
                                 <ComboBoxItem>4</ComboBoxItem>
-                                <ComboBoxItem>5</ComboBoxItem>
+                                <ComboBoxItem>공백</ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                     </StackPanel>

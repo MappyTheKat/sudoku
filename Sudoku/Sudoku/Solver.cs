@@ -31,13 +31,20 @@ namespace Sudoku
         {
             List<Thread> threads = new List<Thread>();
             string message = "";
+
+            if(!originalBoard.isValid())
+            {// 보드가 정상이 아니네용...
+                SolveEnded(this, new SolveEndedArgs(solution.isComplete(), "invalid puzzle..."));
+                return;
+            }
+
             if (solvingMethod == 0)
                 SolveBacktrack();
             if (solvingMethod == 1)
             {
                 //do some hueristic...
                 bool done = false;
-                threads.Add(new Thread(
+                /*threads.Add(new Thread(
                     () =>
                     {
                         fiveseconds();
@@ -50,13 +57,15 @@ namespace Sudoku
                         SolveBacktrack();
                         message = "backtracking completed";
                         done = true;
-                    }));
+                    }));*/
                 threads.Add(new Thread(
                     () =>
                     {
                         SingleModule sm = new SingleModule(originalBoard);
-                        if (sm.Solve())
-                            done = true;
+                        sm.Solve();
+                        solution = sm.original;
+                        PresentBoard(this, new PresentBoardArgs(sm.original.ToString()));
+                        done = true;
                         message = "single completed";
                     }));
                 foreach (var t in threads)
@@ -64,7 +73,7 @@ namespace Sudoku
                 while (!done)
                 {
                     //implement job scheduler...
-                    Console.WriteLine("waiting for completing");
+                    //Console.WriteLine("waiting for completing");
                     Thread.Sleep(30);
                 }
                 foreach (var t in threads)
@@ -73,8 +82,6 @@ namespace Sudoku
             
             SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
         }
-
-        
 
         public static bool fiveseconds()
         {
