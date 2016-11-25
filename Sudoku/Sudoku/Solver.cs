@@ -15,7 +15,7 @@ namespace Sudoku
         public event EventHandler<PresentBoardArgs> PresentBoard;
         public BacktrackingModule bm;
         public Board solution;
-
+        public List<Thread> threads;
         Board originalBoard;
         int gridSize;
 
@@ -29,7 +29,7 @@ namespace Sudoku
         public void solve(int solvingMethod)
             //solving method 0 : backtraking,  1 : heuristic
         {
-            List<Thread> threads = new List<Thread>();
+            threads = new List<Thread>();
             string message = "";
 
             if(!originalBoard.isValid())
@@ -39,7 +39,11 @@ namespace Sudoku
             }
 
             if (solvingMethod == 0)
-                SolveBacktrack();
+            {
+                threads.Add(new Thread(SolveBacktrack));
+                threads[0].Start();
+                threads[0].Join();
+            }
             if (solvingMethod == 1)
             {
                 //do some hueristic...
@@ -79,8 +83,58 @@ namespace Sudoku
                 foreach (var t in threads)
                     t.Abort();
             }
-            
+            if (solvingMethod == 2)
+            {// heuristic + backtrack
+                //do some hueristic...
+                bool done = false;
+                /*threads.Add(new Thread(
+                    () =>
+                    {
+                        fiveseconds();
+                        message = "timed out after " + 5 + " seconds";
+                        done = true;
+                    }));
+                threads.Add(new Thread(
+                    () =>
+                    {
+                        SolveBacktrack();
+                        message = "backtracking completed";
+                        done = true;
+                    }));*/
+                threads.Add(new Thread(
+                    () =>
+                    {
+                        SingleModule sm = new SingleModule(originalBoard);
+                        sm.Solve();
+                        solution = sm.original;
+                        PresentBoard(this, new PresentBoardArgs(sm.original.ToString()));
+                        originalBoard = solution.Copy();
+                        SolveBacktrack();
+                        done = true;
+                        message = "single + backtrack completed";
+                    }));
+                foreach (var t in threads)
+                    t.Start();
+                while (!done)
+                {
+                    //implement job scheduler...
+                    //Console.WriteLine("waiting for completing");
+                    Thread.Sleep(30);
+                }
+                foreach (var t in threads)
+                    t.Abort();
+            }
+
             SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
+        }
+
+        public void killSolver()
+        {
+            foreach(Thread thread in threads)
+            {
+                thread.Abort();
+            }
+            SolveEnded(this, new SolveEndedArgs(solution.isComplete(), "중단되었습니다."));
         }
 
         public static bool fiveseconds()

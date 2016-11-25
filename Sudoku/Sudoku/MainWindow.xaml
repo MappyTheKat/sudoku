@@ -54,11 +54,13 @@
                             <ComboBox.Items>
                                 <ComboBoxItem>BruteForce</ComboBoxItem>
                                 <ComboBoxItem>Heuristic</ComboBoxItem>
+                                <ComboBoxItem>Heuristic + BruteForce</ComboBoxItem>
                             </ComboBox.Items>
                         </ComboBox>
                     </StackPanel>
                     <Button Margin="0,10,0,0" x:Name="xButtonSolveNow">풀어</Button>
                     <Button Margin="0,10,0,0" x:Name="xButtonRandomGenerate">랜덤으로 만들어라</Button>
+                    <Button Margin="0,10,0,0" x:Name="xButtonStopSolve">풀이 정지</Button>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <TextBlock FontSize="20">상태 :</TextBlock>

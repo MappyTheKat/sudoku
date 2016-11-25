@@ -36,6 +36,7 @@ namespace Sudoku
 
         //private BacktrackingModule bm = null;
         Solver solver;
+        Thread solvingThread;
 
         public MainWindow()
         {
@@ -68,9 +69,11 @@ namespace Sudoku
             xComboBoxSelectSampleInput.SelectionChanged += xComboBoxSampleInputChanged;
             xButtonSolveNow.Click += xButtonSolveNowPressed;
             xButtonRandomGenerate.Click += xButtonRandomGeneratePressed;
+            xButtonStopSolve.Click += xButtonStopSolvePressed;
             StatusReady(); // 처음에 한번 초기화.
             xComboBoxSelectSampleInput.SetValue(ComboBox.SelectedIndexProperty, 4);
         }
+
 
         private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
@@ -78,6 +81,13 @@ namespace Sudoku
             //Console.WriteLine("Generate");
             Board genb = a.generate(0);
             PresentBoard(genb.ToString());
+        }
+
+        private void xButtonStopSolvePressed(object sender, RoutedEventArgs e)
+        {
+            if(solver != null)
+                solver.killSolver();
+            solvingThread.Abort();
         }
 
         void xComboBoxGridsizeSelectChanged(object sender, EventArgs e)
@@ -96,6 +106,28 @@ namespace Sudoku
         void xComboBoxSampleInputChanged(object sender, EventArgs e)
         {
             var comboBox = sender as ComboBox;
+            if((int) xComboBoxSelectPuzzleSize.GetValue(ComboBox.SelectedIndexProperty) == 1)
+            {
+                string data = "" +
+                    "0 0 10 0 0 0 0 13 0 6 16 0 0 0 1 0\n" +
+                    "6 1 0 9 0 0 0 11 0 0 0 0 10 0 0 4\n" +
+                    "0 14 15 5 0 7 10 0 0 0 0 3 0 0 12 6\n" +
+                    "8 2 0 0 0 0 14 15 7 0 0 0 13 9 11 0\n" +
+                    "0 0 2 0 16 12 9 7 15 0 5 0 3 0 6 0\n" +
+                    "0 0 0 10 0 0 5 2 8 0 0 0 0 0 7 0\n" +
+                    "12 3 0 0 14 15 13 0 0 7 0 0 8 0 0 1\n" +
+                    "0 0 0 7 0 6 1 10 0 0 3 2 9 12 0 5\n" +
+                    "0 0 0 0 13 1 0 0 2 0 0 8 0 14 0 0\n" +
+                    "0 0 16 0 0 2 0 0 0 9 0 6 0 0 0 0\n" +
+                    "0 0 0 0 0 0 0 0 0 11 12 4 0 10 5 0\n" +
+                    "0 9 0 14 0 0 0 0 0 10 7 0 16 0 0 2\n" +
+                    "10 6 0 0 5 0 0 0 0 8 0 0 7 0 15 9\n" +
+                    "0 0 3 11 2 16 0 0 0 12 1 0 6 0 0 0\n" +
+                    "13 0 0 0 4 10 0 0 0 0 2 0 0 5 3 8\n" +
+                    "0 0 0 0 7 0 0 0 3 16 13 0 1 0 2 0";
+                PresentBoard(data);
+                return;
+            }
             if (comboBox != null)
             {
                 string[] data = {
@@ -202,12 +234,12 @@ namespace Sudoku
             // 방법 선택. 0 == backtrack, 1 == heuristic
             var m = xComboBoxSelectMethod.SelectedIndex;
 
-            Thread t = new Thread(() => {
+            solvingThread = new Thread(() => {
                 solver.solve(m);
                 });
             StatusRunning();
             dt.Start();
-            t.Start();
+            solvingThread.Start();
         }
 
         public void sv_SolveEnded(object sender, SolveEndedArgs e)
@@ -265,6 +297,7 @@ namespace Sudoku
             xComboBoxSelectSampleInput.IsEnabled = true;
             xButtonSolveNow.IsEnabled = true;
             xButtonRandomGenerate.IsEnabled = true;
+            xButtonStopSolve.IsEnabled = false;
         }
 
         public void StatusRunning()
@@ -274,6 +307,7 @@ namespace Sudoku
             xComboBoxSelectSampleInput.IsEnabled = false;
             xButtonSolveNow.IsEnabled = false;
             xButtonRandomGenerate.IsEnabled = false;
+            xButtonStopSolve.IsEnabled = true;
         }
     }
 }

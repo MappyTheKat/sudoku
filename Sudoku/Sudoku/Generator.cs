@@ -34,7 +34,6 @@ namespace Sudoku
             BacktrackingModule bm;
             List<int> selected = new List<int>();
             Random r = new Random();
-
             //lasvegas algorithms.
             do // while bm has a solution
             {
@@ -49,7 +48,7 @@ namespace Sudoku
                         if (!selected.Contains(inputPosition))
                         {
                             selected.Add(inputPosition);
-                            newBoard.boardData[inputPosition / 9, inputPosition % 9] = r.Next(1, 9);
+                            newBoard.boardData[inputPosition / gridSize, inputPosition % gridSize] = r.Next(1, gridSize);
                             numberSelect--;
                         }
                     }

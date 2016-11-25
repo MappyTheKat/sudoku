@@ -87,7 +87,7 @@ namespace Sudoku.Modules
             {
                 r[i] = copied.getRow(i);
                 c[i] = copied.getCol(i);
-                g[i / 3, i % 3] = copied.getGrid(i / 3, i % 3);
+                g[i / gridWidth, i % gridWidth] = copied.getGrid(i / gridWidth, i % gridWidth);
             }
 
             List<int> total = new List<int>();
