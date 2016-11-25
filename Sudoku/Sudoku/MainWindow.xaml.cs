@@ -26,6 +26,7 @@ namespace Sudoku
     public partial class MainWindow : Window
     {
         public delegate void PresentBoardCallback(string boardstring);
+        public delegate void TimerCallback();
 
         List<Grid> textGridReference = new List<Grid>();
         int gridSize;
@@ -33,13 +34,16 @@ namespace Sudoku
         DispatcherTimer dt = new DispatcherTimer();
         Stopwatch stopWatch = new Stopwatch();
 
-        private BacktrackingModule bm = null;
+        //private BacktrackingModule bm = null;
+        Solver solver;
 
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
-            
+            dt = new DispatcherTimer();
+            dt.Interval = new TimeSpan(0, 0, 0, 0, 10); // Tick 10 ms
+            dt.Tick += new EventHandler(dispatcherTimer_Tick);
         }
 
         void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -48,7 +52,7 @@ namespace Sudoku
             {
                 xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
                 // StopWatch가 돌고 있을때는 문제를 풀고 있을 것이므로 문제의 결과를 받아와서 결과 화면에 적을 수 있어야 한다.
-                //PresentBoard(bm.copied.ToString());
+                PresentBoard(solver.bm.copied.ToString());
             }
             else {
                 dt.Stop();
@@ -186,48 +190,32 @@ namespace Sudoku
             stopWatch = new Stopwatch();
             stopWatch.Start();
             // 여기를 Task로 띄워서 날려보내야 한다.
-            dt = new DispatcherTimer();
-            dt.Interval = new TimeSpan(0, 0, 0, 0, 10); // Tick 10 ms
-            dt.Tick += new EventHandler(dispatcherTimer_Tick);
             dt.Start();
             StatusRunning();
             var board = new Board(ParseInputBox());
-            Solver solver = new Solver(board);
+
+            solver = new Solver(board);
             solver.SolveEnded += sv_SolveEnded;
             solver.PresentBoard += sv_PresentBoard;
 
             Thread t = new Thread(() => {
-                //SolveBacktrack(board)
                 solver.solve(0);
                 });
             t.Start();
-            // var task =  Dispatcher.BeginInvoke(new Action(() => SolveBacktrack(board)));
-            // t.
-            // task.Completed += SolveCompleted;
-            //xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
-            //Console.WriteLine("Time elapsed: " + stopWatch.Elapsed.ToString());
         }
 
-        public void SolveCompleted(object sender, EventArgs e)
+        public void sv_SolveEnded(object sender, SolveEndedArgs e)
+            // solver가 수행을 끝나면 실행하는 이벤트
         {
             stopWatch.Stop(); // StopWatch를 멈춘다.
-
-            xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString(); // 경과 시간을 적는다.
-
-            Board board = null;
-            bool isComplete = false;
-            string message = string.Empty;
-            if (bm.IsSolved)
-            {
-                board = bm.GetSolution();
-                PresentBoard(board.ToString()); // 마지막으로 결과를 다 적고.
-            }
-            else
-            {
-                message = ("Failed to solve");
-            }
-            isComplete = bm.IsSolved;
-            sv_SolveEnded(null, new SolveEndedArgs(isComplete, message));
+            xTextBlockElapsedTime.Dispatcher.Invoke(
+                new TimerCallback(() => xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString())
+            ); // 경과시간 작성
+            
+            string message = e.completed ? string.Empty : "Failed to solve";
+            
+            //board는 solver가 업데이트함.
+            MessageBox.Show(e.completed ? "성공" : "실패 " + ":" + e.message);
         }
 
         void PresentBoard(string boardString)
@@ -256,46 +244,13 @@ namespace Sudoku
             }
             return sb.ToString();
         }
-        /*
-        public void SolveBacktrack(Board board)
-        {
-            Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine("valid board?: " + board.isValid());
-            bm = new BacktrackingModule(board);
-            bm.solve();
-            Console.WriteLine(board.ToString());
-            Console.WriteLine("valid : " + board.isValid());
-            Console.WriteLine("complete : " + board.isComplete());
-            return;
-        }*/
-
-        void bm_PrintCall(object sender, BacktrackingModule.PresentArgs e)
-        // when a solving module sends a present signal.
-        {
-            //PresentBoard(e.boardString);
-            //Thread.Sleep(1);
-            textGridReference[e.pos.Item1 * gridSize + e.pos.Item2].Children[0].SetValue(TextBox.TextProperty, e.value.ToString());
-            //Console.WriteLine("it has called...");
-            //Environment.Exit(0);
-        }
 
         void sv_PresentBoard(object sender, PresentBoardArgs e)
         {
-            //PresentBoardCallback(e.boardstring);
-            //foreach(var textGrid in textGridReference)
-            {
-                xGridPuzzleBoard.Dispatcher.Invoke(
-                    new PresentBoardCallback(PresentBoard),
-                    new object[] { e.boardstring }
-                );
-            }
-        }
-
-        //void sv_SolveEnded(bool isValid, string message)
-        void sv_SolveEnded(object sender, SolveEndedArgs e)
-        {
-            stopWatch.Stop();
-            MessageBox.Show(e.completed ? "성공" : "실패 " + ":" + e.message);
+            xGridPuzzleBoard.Dispatcher.Invoke(
+                new PresentBoardCallback(PresentBoard),
+                new object[] { e.boardstring }
+            );
         }
 
         public void StatusReady()

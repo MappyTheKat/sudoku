@@ -13,6 +13,9 @@ namespace Sudoku
         
         public event EventHandler<SolveEndedArgs> SolveEnded;
         public event EventHandler<PresentBoardArgs> PresentBoard;
+        public BacktrackingModule bm;
+        public Board solution;
+
         Board originalBoard;
         int gridSize;
 
@@ -68,7 +71,7 @@ namespace Sudoku
             Board board = originalBoard;
             Console.WriteLine("hello, Cruel World!");
             Console.WriteLine("valid board?: " + board.isValid());
-            BacktrackingModule bm = new BacktrackingModule(board);
+            bm = new BacktrackingModule(board);
             //bm.PrintCall += bm_PrintCall;
             var solved = bm.solve();
             string message = string.Empty;

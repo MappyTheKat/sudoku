@@ -9,8 +9,6 @@ namespace Sudoku.Modules
 {
     public class BacktrackingModule : ISolver
     {
-        public event EventHandler<PresentArgs> PrintCall;
-
         public Board original;
         public Board copied = null;
         int gridSize;
@@ -55,7 +53,6 @@ namespace Sudoku.Modules
         bool backtrack(int n)
         {
             int i, j, k;
-            // Int64 count = 0;
             if (n == 0)
                 return copied.isComplete();
 
@@ -68,16 +65,12 @@ namespace Sudoku.Modules
                         for (k = 1; k <= gridSize; k++)
                         {
                             copied.boardData[i, j] = k;
-                            //if(count++ % 100 == 0)
-                            //PrintCall(this, new PresentArgs(i, j, k));
                             if (copied.isValid() && backtrack(n - 1))
                             {
                                 return true;
                             }
                         }
                         copied.boardData[i, j] = 0;
-                        //if (count % 100 == 0)
-                        //PrintCall(this, new PresentArgs(i, j, 0));
                         return false;
                     }
                 }
