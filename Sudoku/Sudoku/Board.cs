@@ -58,59 +58,21 @@ namespace Sudoku
         public bool isValid()
         {
             //check wether board is valid
-
-            //row validate
-            for (int i = 0; i < gridSize; i++)
+            
+            int width = (int) Math.Sqrt(gridSize);
+            for(int i = 0; i < gridSize; i++)
             {
-                for (int j = 1; j <= gridSize; j++)
+                var r = getRow(i);
+                var c = getCol(i);
+                var g = getGrid(i % width, i / width);
+                for(int j = 1; j <= gridSize; j++)
                 {
-                    int cnt = 0;
-                    for (int k = 0; k < gridSize; k++)
-                    {
-                        if (boardData[i, k] == j)
-                            cnt++;
-                    }
-                    if (cnt > 1)
+                    if (count_number(r, j) > 1
+                        || count_number(c, j) > 1
+                        || count_number(g, j) > 1)
                         return false;
                 }
             }
-
-            //column validate
-            for (int i = 0; i < gridSize; i++)
-            {
-                for (int j = 1; j <= gridSize; j++)
-                {
-                    int cnt = 0;
-                    for (int k = 0; k < gridSize; k++)
-                    {
-                        if (boardData[k, i] == j)
-                            cnt++;
-                    }
-                    if (cnt > 1)
-                        return false;
-                }
-            }
-
-            //grid validate
-            int width = (int)Math.Sqrt(gridSize);
-            int row, col;
-            for (int i = 0; i < gridSize; i++)
-            {
-                row = (i / width) * width;
-                col = (i % width) * width;
-                for (int j = 1; j <= gridSize; j++)
-                {
-                    int cnt = 0;
-                    for (int k = 0; k < gridSize; k++)
-                    {
-                        if (boardData[row + (k / width), col + (k % width)] == j)
-                            cnt++;
-                    }
-                    if (cnt > 1)
-                        return false;
-                }
-            }
-
             return true;
         }
 
@@ -130,6 +92,57 @@ namespace Sudoku
                     c++;
             }
             return c;
+        }
+
+        private int count_number(List<int> a, int f)
+        {
+            int cnt = 0;
+            foreach(int i in a)
+            {
+                if (i == f)
+                    cnt++;
+            }
+            return cnt;
+        }
+
+        public List<int> getCol(int n)
+            // grid x grid 의 nth col list 반환
+        {
+            if (gridSize < n || n < 0)
+                return null;
+            List<int> ret = new List<int>();
+            for(int i = 0; i < gridSize; i++)
+            {
+                ret.Add(boardData[i, n]);
+            }
+            return ret;
+        }
+
+        public List<int> getRow(int n)
+            // nth row 반환
+        {
+            if (gridSize < n || n < 0)
+                return null;
+            List<int> ret = new List<int>();
+            for(int i = 0; i < gridSize; i++)
+            {
+                ret.Add(boardData[n, i]);
+            }
+            return ret;
+        }
+
+        public List<int> getGrid(int n, int m)
+            // (sqrt(gridsize) * sqrt(gridsize) 그리드에서 (n, m)th 그리드 반환
+        {
+            int gridWidth = (int) Math.Sqrt(gridSize);
+            if (gridWidth < n || n < 0 || gridWidth < m || m < 0)
+                return null;
+            List<int> ret = new List<int>();
+            for(int i = 0; i < gridSize; i++)
+            {
+                ret.Add(boardData[i / gridWidth, i % gridWidth]);
+            }
+            return ret;
         }
 
         // 기본 생성자. Clone을 구현하기 위해서 만든 것이니 웬만하면 호출하지 맙시다.

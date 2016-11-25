@@ -74,6 +74,8 @@ namespace Sudoku
             SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
         }
 
+        
+
         public static bool fiveseconds()
         {
             Thread.Sleep(5000);
