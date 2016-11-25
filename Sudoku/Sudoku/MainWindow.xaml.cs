@@ -190,8 +190,6 @@ namespace Sudoku
             stopWatch = new Stopwatch();
             stopWatch.Start();
             // 여기를 Task로 띄워서 날려보내야 한다.
-            dt.Start();
-            StatusRunning();
             var board = new Board(ParseInputBox());
 
             solver = new Solver(board);
@@ -204,6 +202,8 @@ namespace Sudoku
             Thread t = new Thread(() => {
                 solver.solve(m);
                 });
+            StatusRunning();
+            dt.Start();
             t.Start();
         }
 
@@ -214,8 +214,6 @@ namespace Sudoku
             xTextBlockElapsedTime.Dispatcher.Invoke(
                 new TimerCallback(() => xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString())
             ); // 경과시간 작성
-            
-            string message = e.completed ? string.Empty : "Failed to solve";
             
             //board는 solver가 업데이트함.
             MessageBox.Show(e.completed ? "성공" : "실패 " + ":" + e.message);
