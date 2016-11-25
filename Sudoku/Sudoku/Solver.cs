@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using Sudoku.Modules;
 
 namespace Sudoku
@@ -14,28 +15,61 @@ namespace Sudoku
         Board originalBoard;
         int gridSize;
 
-
         public Solver(Board b)
         {
             originalBoard = b.Copy();
             gridSize = originalBoard.gridSize;
         }
 
-        public async Task solve(int solvingMethod)
+        public void solve(int solvingMethod)
             //solving method 0 : backtraking,  1 : heuristic
         {
             if (solvingMethod == 0)
-                await SolveBacktrack();
+                SolveBacktrack();
+            if (solvingMethod == 1)
+            {
+                //do some hueristic...
+                bool done = false;
+                var thread0 = new Thread(
+                    () =>
+                    {
+                        fiveseconds();
+                        done = true;
+                    });
+                var thread1 = new Thread(
+                    () =>
+                    {
+                        SolveBacktrack();
+                        Console.WriteLine("done...");
+                        done = true;
+                    });
+                thread0.Start();
+                thread1.Start();
+                while (!done)
+                {
+                    Console.WriteLine("waiting for completing");
+                    Thread.Sleep(1000);
+                }
+                thread0.Abort();
+                thread1.Abort();
+            }
         }
 
-        async Task SolveBacktrack()
+        public static bool fiveseconds()
+        {
+            Thread.Sleep(5000);
+            Console.WriteLine("i counted five seconds...");
+            return true;
+        }
+
+        void SolveBacktrack()
         {
             Board board = originalBoard;
             Console.WriteLine("hello, Cruel World!");
             Console.WriteLine("valid board?: " + board.isValid());
             BacktrackingModule bm = new BacktrackingModule(board);
             //bm.PrintCall += bm_PrintCall;
-            var solved = await bm.solve();
+            var solved = bm.solve();
             string message = string.Empty;
             if (solved)
             {

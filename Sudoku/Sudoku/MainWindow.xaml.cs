@@ -42,11 +42,11 @@ namespace Sudoku
             StatusReady(); // 처음에 한번 초기화.
         }
 
-        private async void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
+        private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
             Generator a = new Generator(gridSize * gridSize);
             //Console.WriteLine("Generate");
-            Board genb = await a.generate(0);
+            Board genb = a.generate(0);
             PresentBoard(genb.ToString());
         }
 
@@ -158,7 +158,7 @@ namespace Sudoku
             }
         }
 
-        public async void xButtonSolveNowPressed(object sender, EventArgs e)
+        public void xButtonSolveNowPressed(object sender, EventArgs e)
         {
             Solver solver;
             Stopwatch stopwatch = new Stopwatch();
@@ -166,9 +166,7 @@ namespace Sudoku
             solver = new Solver(new Board(ParseInputBox()));
             solver.SolveEnded += sv_SolveEnded;
             solver.PresentBoard += sv_PresentBoard;
-            await solver.solve(0);
-            //await SolveBacktrack(new Board(ParseInputBox()));
-            //SolveEnded(board.isComplete(), message);
+            solver.solve(1);
             stopwatch.Stop();
             xTextBlockElapsedTime.Text = stopwatch.Elapsed.ToString();
             Console.WriteLine("Time elapsed: " + stopwatch.Elapsed.ToString());
@@ -200,32 +198,7 @@ namespace Sudoku
             }
             return sb.ToString();
         }
-        /*
-        public async Task SolveBacktrack(Board board)
-        {
-            Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine("valid board?: " + board.isValid());
-            BacktrackingModule bm = new BacktrackingModule(board);
-            bm.PrintCall += bm_PrintCall;
-            var solved = await bm.solve();
-            string message = string.Empty;
-            if (solved)
-            {
-                board = bm.GetSolution();
-                PresentBoard(board.ToString());
-            }
 
-            else
-            {
-                message = ("Failed to solve");
-            }
-            SolveEnded(board.isComplete(), message);
-            Console.WriteLine(board.ToString());
-            Console.WriteLine("valid : " + board.isValid());
-            Console.WriteLine("complete : " + board.isComplete());
-            return ;
-        }
-        */
         void sv_PrintCall(object sender, BacktrackingModule.PresentArgs e)
         // when a solving module sends a present signal.
         {

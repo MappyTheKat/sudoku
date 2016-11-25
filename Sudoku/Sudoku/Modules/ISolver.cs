@@ -8,7 +8,7 @@ namespace Sudoku.Modules
 {
     public interface ISolver
     {
-        void Solve();
+        bool Solve();
         
     }
 }

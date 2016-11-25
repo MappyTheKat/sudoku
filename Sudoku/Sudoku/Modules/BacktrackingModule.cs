@@ -33,7 +33,7 @@ namespace Sudoku.Modules
             gridSize = b.gridSize;
         }
 
-        public async Task<bool> solve()
+        public bool solve()
         {
             if (!original.isValid())
             {
@@ -41,17 +41,12 @@ namespace Sudoku.Modules
                 return false;
             }
             copied = new Board(original.ToString());
-            return await BackTrack(copied.count_zero());
+            return backtrack(copied.count_zero());
         }
 
         public Board GetSolution()
         {
             return copied;
-        }
-        public async Task<bool> BackTrack(int i)
-        {
-            var b = await Dispatcher.CurrentDispatcher.InvokeAsync<bool>(new Func<bool>(() => backtrack(i)));
-            return b;
         }
 
         bool backtrack(int n)
@@ -88,9 +83,10 @@ namespace Sudoku.Modules
         }
 
         // Implementing ISolver interface
-        public void Solve()
+        public bool Solve()
         {
-
+            //not implemented.. 
+            return false;
         }
     }
 }

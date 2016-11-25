@@ -159,7 +159,6 @@ namespace Sudoku
                 }
             }
             return board;
-            // throw new NotImplementedException();
         }
     }
 }

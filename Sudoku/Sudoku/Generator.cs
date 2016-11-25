@@ -26,7 +26,7 @@ namespace Sudoku
             gridSize = size;
         }
 
-        public async Task<Board> generate(int holeNumber)
+        public Board generate(int holeNumber)
         {
             const int NUM_MAX = 12; // number of random generated numbers
 
@@ -58,7 +58,7 @@ namespace Sudoku
                 while (!newBoard.isValid());
                 bm = new BacktrackingModule(newBoard);
             }
-            while (!await bm.solve());
+            while (bm.solve());
 
             // TODO: implement digging holes here.
 
