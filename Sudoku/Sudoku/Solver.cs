@@ -22,6 +22,7 @@ namespace Sudoku
         public Solver(Board b)
         {
             originalBoard = b.Copy();
+            solution = b.Copy();
             gridSize = originalBoard.gridSize;
         }
 
@@ -52,11 +53,13 @@ namespace Sudoku
                 while (!done)
                 {
                     Console.WriteLine("waiting for completing");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(30);
                 }
                 thread0.Abort();
                 thread1.Abort();
             }
+            string message = solution.isComplete() ? "" : "Failed to solve";
+            SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
         }
 
         public static bool fiveseconds()
@@ -72,20 +75,14 @@ namespace Sudoku
             Console.WriteLine("hello, Cruel World!");
             Console.WriteLine("valid board?: " + board.isValid());
             bm = new BacktrackingModule(board);
-            //bm.PrintCall += bm_PrintCall;
             var solved = bm.solve();
             string message = string.Empty;
             if (solved)
             {
                 board = bm.GetSolution();
+                solution = board;
                 PresentBoard(this, new PresentBoardArgs(board.ToString()));
             }
-
-            else
-            {
-                message = ("Failed to solve");
-            }
-            SolveEnded(this, new SolveEndedArgs(board.isComplete(), message));
             Console.WriteLine(board.ToString());
             Console.WriteLine("valid : " + board.isValid());
             Console.WriteLine("complete : " + board.isComplete());
