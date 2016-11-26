@@ -9,7 +9,12 @@ namespace Sudoku
 {
     public class Generator
     {
+        public event EventHandler<PresentBoardArgs> PresentBoard;
+        public event EventHandler<EventArgs> GenerateEnded;
+
+        public BacktrackingModule bm;
         Board initBoard;
+        Board newBoard;
         int gridSize;
  
         public Generator(int size)
@@ -23,20 +28,29 @@ namespace Sudoku
                 }
             }
             initBoard = new Sudoku.Board(init);
+            newBoard = initBoard.Copy();
             gridSize = size;
         }
 
-        public Board generate(int holeNumber)
+        public Board getPresentBoard()
         {
-            const int NUM_MAX = 12; // number of random generated numbers
+            if(bm != null)
+            {
+                return bm.copied;
+            }
+            return newBoard;
+        }
 
-            Board newBoard = initBoard.Copy();
-            BacktrackingModule bm;
+        public void generate(int holeNumber)
+        {
+            int NUM_MAX = gridSize * 3 - 6; // number of random generated numbers
+
             List<int> selected = new List<int>();
             Random r = new Random();
             //lasvegas algorithms.
             do // while bm has a solution
             {
+                bm = null;
                 do // while newBoard got valid puzzle
                 {
                     int numberSelect = NUM_MAX;
@@ -62,7 +76,10 @@ namespace Sudoku
             // TODO: implement digging holes here.
 
 
-            return bm.GetSolution();
+            Console.WriteLine("generating complete");
+            PresentBoard(this, new PresentBoardArgs(bm.copied.ToString()));
+            GenerateEnded(this, new EventArgs());
+            //return bm.GetSolution();
         }
     }
 }

@@ -36,6 +36,7 @@ namespace Sudoku
 
         //private BacktrackingModule bm = null;
         Solver solver;
+        Generator gn;
         Thread solvingThread;
 
         public MainWindow()
@@ -53,9 +54,10 @@ namespace Sudoku
             {
                 xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString();
                 // StopWatch가 돌고 있을때는 문제를 풀고 있을 것이므로 문제의 결과를 받아와서 결과 화면에 적을 수 있어야 한다.
-                if(solver.bm != null)
-                    PresentBoard(solver.bm.copied.ToString());
-                // TODO: 나중에 수행방식별로 바꾸게 하여야함...
+                if(solver != null)
+                    PresentBoard(solver.getPresentBoard().ToString());
+                if (gn != null)
+                    PresentBoard(gn.getPresentBoard().ToString());
             }
             else {
                 dt.Stop();
@@ -77,10 +79,16 @@ namespace Sudoku
 
         private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
-            Generator a = new Generator(gridSize * gridSize);
+            StatusRunning("생성중");
+            stopWatch.Restart();
+            Generator gn = new Generator(gridSize * gridSize);
+            gn.PresentBoard += sv_PresentBoard;
+            gn.GenerateEnded += gn_GenerateEnded;
             //Console.WriteLine("Generate");
-            Board genb = a.generate(0);
-            PresentBoard(genb.ToString());
+            solvingThread = new Thread(() => gn.generate(0));
+            solvingThread.Start();
+            dt.Start();
+            //PresentBoard(genb.ToString());
         }
 
         private void xButtonStopSolvePressed(object sender, RoutedEventArgs e)
@@ -210,7 +218,7 @@ namespace Sudoku
                 {
                     var border = new Border() { BorderThickness = new Thickness(1) };
                     var textGrid = new Grid();
-                    textGrid.Children.Add(new TextBox() { Text = "0", FontSize = 30, TextAlignment = TextAlignment.Center });
+                    textGrid.Children.Add(new TextBox() { Text = "", FontSize = 30, TextAlignment = TextAlignment.Center });
                     border.Child = textGrid;
                     textGridReference.Add(textGrid);
                     xGridPuzzleBoard.Children.Add(border);
@@ -237,7 +245,7 @@ namespace Sudoku
             solvingThread = new Thread(() => {
                 solver.solve(m);
                 });
-            StatusRunning();
+            StatusRunning("문제 해결중");
             dt.Start();
             solvingThread.Start();
         }
@@ -245,6 +253,8 @@ namespace Sudoku
         public void sv_SolveEnded(object sender, SolveEndedArgs e)
             // solver가 수행을 끝나면 실행하는 이벤트
         {
+            if (!stopWatch.IsRunning)
+                return;
             stopWatch.Stop(); // StopWatch를 멈춘다.
             xTextBlockElapsedTime.Dispatcher.Invoke(
                 new TimerCallback(() => xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString())
@@ -254,10 +264,28 @@ namespace Sudoku
             MessageBox.Show(e.completed ? "성공" : "실패 " + ":" + e.message);
         }
 
+        public void gn_GenerateEnded(object sender, EventArgs e)
+        {
+            if (!stopWatch.IsRunning)
+                return;
+            stopWatch.Stop();
+            stopWatch.Stop(); // StopWatch를 멈춘다.
+            xTextBlockElapsedTime.Dispatcher.Invoke(
+                new TimerCallback(() => xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString())
+            ); // 경과시간 작성
+            gn = null;
+        }
+
         void PresentBoard(string boardString)
         {
             var target = boardString.Trim().Replace("\n", " ").Replace("  ", " ").Split();
             var size = textGridReference.Count;
+            if (size != target.Length)
+            {
+                Console.WriteLine("size does not match!");
+                return;
+            }
+                
             for (int i = 0; i < size; i++)
             {
                 var targetGrid = textGridReference[i];
@@ -300,9 +328,9 @@ namespace Sudoku
             xButtonStopSolve.IsEnabled = false;
         }
 
-        public void StatusRunning()
+        public void StatusRunning(string message)
         {
-            xTextBlockStatus.Text = "문제 해결중";
+            xTextBlockStatus.Text = message;
             xComboBoxSelectPuzzleSize.IsEnabled = false;
             xComboBoxSelectSampleInput.IsEnabled = false;
             xButtonSolveNow.IsEnabled = false;

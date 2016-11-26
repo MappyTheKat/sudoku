@@ -18,6 +18,7 @@ namespace Sudoku
         public List<Thread> threads;
         Board originalBoard;
         int gridSize;
+        int solvingMethod = 0;
 
         public Solver(Board b)
         {
@@ -26,9 +27,10 @@ namespace Sudoku
             gridSize = originalBoard.gridSize;
         }
 
-        public void solve(int solvingMethod)
+        public void solve(int solm)
             //solving method 0 : backtraking,  1 : heuristic
         {
+            solvingMethod = solm;
             threads = new List<Thread>();
             string message = "";
 
@@ -44,7 +46,7 @@ namespace Sudoku
                 threads[0].Start();
                 threads[0].Join();
             }
-            if (solvingMethod == 1)
+            if (solvingMethod >= 1)
             {
                 //do some hueristic...
                 bool done = false;
@@ -68,6 +70,7 @@ namespace Sudoku
                         SingleModule sm = new SingleModule(originalBoard);
                         sm.Solve();
                         solution = sm.original;
+                        originalBoard = sm.original.Copy();
                         PresentBoard(this, new PresentBoardArgs(sm.original.ToString()));
                         done = true;
                         message = "single completed";
@@ -85,47 +88,22 @@ namespace Sudoku
             }
             if (solvingMethod == 2)
             {// heuristic + backtrack
-                //do some hueristic...
-                bool done = false;
-                /*threads.Add(new Thread(
-                    () =>
-                    {
-                        fiveseconds();
-                        message = "timed out after " + 5 + " seconds";
-                        done = true;
-                    }));
-                threads.Add(new Thread(
-                    () =>
-                    {
-                        SolveBacktrack();
-                        message = "backtracking completed";
-                        done = true;
-                    }));*/
-                threads.Add(new Thread(
-                    () =>
-                    {
-                        SingleModule sm = new SingleModule(originalBoard);
-                        sm.Solve();
-                        solution = sm.original;
-                        PresentBoard(this, new PresentBoardArgs(sm.original.ToString()));
-                        originalBoard = solution.Copy();
-                        SolveBacktrack();
-                        done = true;
-                        message = "single + backtrack completed";
-                    }));
-                foreach (var t in threads)
-                    t.Start();
-                while (!done)
-                {
-                    //implement job scheduler...
-                    //Console.WriteLine("waiting for completing");
-                    Thread.Sleep(30);
-                }
-                foreach (var t in threads)
-                    t.Abort();
+                threads.Clear();
+                threads.Add(new Thread(SolveBacktrack));
+                threads[0].Start();
+                threads[0].Join();
             }
 
             SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
+        }
+
+        internal object getPresentBoard()
+        {
+            if(solvingMethod == 1)
+            {
+                return originalBoard;
+            }
+            return bm.copied;
         }
 
         public void killSolver()
@@ -134,6 +112,7 @@ namespace Sudoku
             {
                 thread.Abort();
             }
+            PresentBoard(this, new PresentBoardArgs(originalBoard.ToString()));
             SolveEnded(this, new SolveEndedArgs(solution.isComplete(), "중단되었습니다."));
         }
 
