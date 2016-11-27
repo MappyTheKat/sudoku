@@ -27,8 +27,9 @@ namespace Sudoku
             gridSize = originalBoard.gridSize;
         }
 
-        public void solve(int solm)
+        public bool solve(int solm)
             //solving method 0 : backtraking,  1 : heuristic
+            //returns true when solution found...
         {
             solvingMethod = solm;
             threads = new List<Thread>();
@@ -37,7 +38,7 @@ namespace Sudoku
             if(!originalBoard.isValid())
             {// 보드가 정상이 아니네용...
                 SolveEnded(this, new SolveEndedArgs(solution.isComplete(), "invalid puzzle..."));
-                return;
+                return false;
             }
 
             if (solvingMethod == 0)
@@ -93,15 +94,16 @@ namespace Sudoku
                 threads[0].Start();
                 threads[0].Join();
             }
-
-            SolveEnded(this, new SolveEndedArgs(solution.isComplete(), message));
+            Console.WriteLine("solver returned {0}", solution.isComplete());
+            SolveEnded?.Invoke(this, new SolveEndedArgs(solution.isComplete(), message));
+            return solution.isComplete();
         }
 
-        internal object getPresentBoard()
+        public Board getPresentBoard()
         {
-            if(solvingMethod == 1)
+            if(solvingMethod == 1 || bm == null)
             {
-                return originalBoard;
+                return solution;
             }
             return bm.copied;
         }
@@ -112,8 +114,8 @@ namespace Sudoku
             {
                 thread.Abort();
             }
-            PresentBoard(this, new PresentBoardArgs(originalBoard.ToString()));
-            SolveEnded(this, new SolveEndedArgs(solution.isComplete(), "중단되었습니다."));
+            PresentBoard(this, new PresentBoardArgs(solution.ToString()));
+            SolveEnded?.Invoke(this, new SolveEndedArgs(solution.isComplete(), "중단되었습니다."));
         }
 
         public static bool fiveseconds()
@@ -125,21 +127,18 @@ namespace Sudoku
 
         void SolveBacktrack()
         {
-            Board board = originalBoard;
-            Console.WriteLine("hello, Cruel World!");
-            Console.WriteLine("valid board?: " + board.isValid());
-            bm = new BacktrackingModule(board);
+            Console.WriteLine("backtraking initiated.");
+            bm = new BacktrackingModule(originalBoard);
             var solved = bm.solve();
             string message = string.Empty;
             if (solved)
             {
-                board = bm.GetSolution();
-                solution = board;
-                PresentBoard(this, new PresentBoardArgs(board.ToString()));
+                solution = bm.GetSolution().Copy();
+                PresentBoard(this, new PresentBoardArgs(solution.ToString()));
             }
-            Console.WriteLine(board.ToString());
-            Console.WriteLine("valid : " + board.isValid());
-            Console.WriteLine("complete : " + board.isComplete());
+            Console.WriteLine(solution.ToString());
+            Console.WriteLine("valid : " + solution.isValid());
+            Console.WriteLine("complete : " + solution.isComplete());
             return;
         }
         

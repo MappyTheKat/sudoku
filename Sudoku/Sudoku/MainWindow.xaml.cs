@@ -81,20 +81,22 @@ namespace Sudoku
         {
             StatusRunning("생성중");
             stopWatch.Restart();
-            Generator gn = new Generator(gridSize * gridSize);
+
+            gn = new Generator(gridSize * gridSize);
             gn.PresentBoard += sv_PresentBoard;
             gn.GenerateEnded += gn_GenerateEnded;
-            //Console.WriteLine("Generate");
             solvingThread = new Thread(() => gn.generate(0));
             solvingThread.Start();
             dt.Start();
-            //PresentBoard(genb.ToString());
         }
 
         private void xButtonStopSolvePressed(object sender, RoutedEventArgs e)
         {
+            //만약 solve stop일 경우 solver 중단, gn stop일 경우 gn 중단
             if(solver != null)
                 solver.killSolver();
+            if (gn != null)
+                gn.endGenerate();
             solvingThread.Abort();
         }
 
@@ -282,8 +284,7 @@ namespace Sudoku
             var size = textGridReference.Count;
             if (size != target.Length)
             {
-                Console.WriteLine("size does not match!");
-                return;
+                throw new Exception("size does not match!");
             }
                 
             for (int i = 0; i < size; i++)

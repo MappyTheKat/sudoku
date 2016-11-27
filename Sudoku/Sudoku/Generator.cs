@@ -12,7 +12,7 @@ namespace Sudoku
         public event EventHandler<PresentBoardArgs> PresentBoard;
         public event EventHandler<EventArgs> GenerateEnded;
 
-        public BacktrackingModule bm;
+        Solver sv;
         Board initBoard;
         Board newBoard;
         int gridSize;
@@ -34,9 +34,9 @@ namespace Sudoku
 
         public Board getPresentBoard()
         {
-            if(bm != null)
+            if(sv != null)
             {
-                return bm.copied;
+                return sv.getPresentBoard();
             }
             return newBoard;
         }
@@ -47,10 +47,11 @@ namespace Sudoku
 
             List<int> selected = new List<int>();
             Random r = new Random();
+
             //lasvegas algorithms.
             do // while bm has a solution
             {
-                bm = null;
+                sv = null;
                 do // while newBoard got valid puzzle
                 {
                     int numberSelect = NUM_MAX;
@@ -69,17 +70,24 @@ namespace Sudoku
 
                 }
                 while (!newBoard.isValid());
-                bm = new BacktrackingModule(newBoard);
+                sv = new Solver(newBoard);
+                sv.PresentBoard += PresentBoard;
             }
-            while (!bm.solve());
+            while (!sv.solve(2));
 
             // TODO: implement digging holes here.
 
 
             Console.WriteLine("generating complete");
-            PresentBoard(this, new PresentBoardArgs(bm.copied.ToString()));
+            PresentBoard(this, new PresentBoardArgs(sv.solution.ToString()));
+            endGenerate();
+        }
+
+        public void endGenerate()
+        {
+            if(sv != null)
+                sv.killSolver();
             GenerateEnded(this, new EventArgs());
-            //return bm.GetSolution();
         }
     }
 }

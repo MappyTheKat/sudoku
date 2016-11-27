@@ -13,8 +13,6 @@ namespace Sudoku.Modules
         public Board copied = null;
         int gridSize;
 
-        public bool IsSolved;
-
         public BacktrackingModule(Board b)
         {
             original = b;
@@ -29,13 +27,12 @@ namespace Sudoku.Modules
                 return false;
             }
             copied = new Board(original.ToString());
-            IsSolved = backtrack(copied.count_zero());
-            return IsSolved;
+            return backtrack(copied.count_zero());
         }
 
         public Board GetSolution()
         {
-            return copied;
+            return copied.Copy();
         }
 
         bool backtrack(int n)
