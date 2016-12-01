@@ -13,24 +13,26 @@ namespace Sudoku
         public int gridSize = 0; // 작은 네모칸의 사이즈
         int width; // 한 그리드의 사이즈
         bool valid = true;
-        int[,] rows;
-        int[,] cols;
-        int[,] grids;
+        int[][] rows;
+        int[][] cols;
+        int[][] grids;
 
         public void setBoard(int i, int j, int value)
         {
             boardData[i, j] = value;
-            /*
+            rows[i][j] = value;
+            cols[j][i] = value;
+            grids[(i / width) * width + j / width][(i % width) * width + j % width] = value;
             var r = getRow(i);
             var c = getCol(j);
-            var g = getGrid(i / width, j / width);
+            var g = getGrid(i, j);
             if (valid)
             {
                 if (count_number(r, value) > 1 || count_number(c, value) > 1 || count_number(g, value) > 1)
                     valid = false;
             }
             else
-                checkValid();   */
+                checkValid();
         }
 
         public int getBoard(int i, int j)
@@ -42,14 +44,11 @@ namespace Sudoku
         {
             for (int i = 0; i < gridSize; i++)
             {
-                var r = getRow(i);
-                var c = getCol(i);
-                var g = getGrid(i % width, i / width);
                 for (int j = 1; j <= gridSize; j++)
                 {
-                    if (count_number(r, j) > 1
-                        || count_number(c, j) > 1
-                        || count_number(g, j) > 1)
+                    if (count_number(rows[i], j) > 1
+                        || count_number(cols[i], j) > 1
+                        || count_number(grids[i], j) > 1)
                     {
                         valid = false;
                         return;
@@ -75,9 +74,9 @@ namespace Sudoku
             {
                 throw new System.ArgumentException("Parsing Error, Length failed.");
             }
-
+            width = (int)Math.Sqrt(gridSize);
             boardData = new int[gridSize, gridSize];
-
+            //boardData init
             for (int i = 0; i < gridSize; i++)
             {
                 for (int j = 0; j < gridSize; j++)
@@ -86,8 +85,27 @@ namespace Sudoku
                 }
             }
 
+            //rows and cols init.
+            rows = new int[gridSize][];
+            cols = new int[gridSize][];
+            grids = new int[gridSize][];
+            for (int i = 0; i < gridSize; i++)
+            {
+                rows[i] = new int[gridSize];
+                cols[i] = new int[gridSize];
+                grids[i] = new int[gridSize];
+                int offseti = (i / 3) * width;
+                int offsetj = (i % 3) * width;
+                for (int j = 0; j < gridSize; j++)
+                {
+                    rows[i][j] = boardData[i, j];
+                    cols[i][j] = boardData[j, i];
+                    grids[i][j] = boardData[offseti + j / width, offsetj + j % width];
+                }
+            }
+
+
             //check wether board is valid
-            width = (int)Math.Sqrt(gridSize);
             checkValid();
         }
 
@@ -108,7 +126,6 @@ namespace Sudoku
 
         public bool isValid()
         {
-            checkValid();
             return valid;
         }
 
@@ -130,7 +147,8 @@ namespace Sudoku
             return c;
         }
 
-        private int count_number(List<int> a, int f)
+        private int count_number(int[] a, int f)
+            // get으로 불러들인 row안의 f 갯수 반환
         {
             int cnt = 0;
             foreach(int i in a)
@@ -141,44 +159,22 @@ namespace Sudoku
             return cnt;
         }
 
-        public List<int> getCol(int n)
+        public int[] getCol(int n)
             // grid x grid 의 nth col list 반환
         {
-            if (gridSize < n || n < 0)
-                return null;
-            List<int> ret = new List<int>();
-            for(int i = 0; i < gridSize; i++)
-            {
-                ret.Add(boardData[i, n]);
-            }
-            return ret;
+            return cols[n];
         }
 
-        public List<int> getRow(int n)
+        public int[] getRow(int n)
             // nth row 반환
         {
-            if (gridSize < n || n < 0)
-                return null;
-            List<int> ret = new List<int>();
-            for(int i = 0; i < gridSize; i++)
-            {
-                ret.Add(boardData[n, i]);
-            }
-            return ret;
+            return rows[n];
         }
 
-        public List<int> getGrid(int n, int m)
+        public int[] getGrid(int i, int j)
             // (sqrt(gridsize) * sqrt(gridsize) 그리드에서 (n, m)th 그리드 반환
         {
-            int gridWidth = (int) Math.Sqrt(gridSize);
-            if (gridWidth < n || n < 0 || gridWidth < m || m < 0)
-                return null;
-            List<int> ret = new List<int>();
-            for(int i = 0; i < gridSize; i++)
-            {
-                ret.Add(boardData[i / gridWidth + n * gridWidth, i % gridWidth + m * gridWidth]);
-            }
-            return ret;
+            return grids[(i / width) * width + j / width];
         }
 
         // 기본 생성자. Clone을 구현하기 위해서 만든 것이니 웬만하면 호출하지 맙시다.
@@ -194,17 +190,26 @@ namespace Sudoku
 
         object ICloneable.Clone()
         {
-            var board = new Board();
+            var board = new Board(); // TODO: 이거 그냥 Board에 인자 넣어도 되는거 아닌지 알아보기
             board.gridSize = this.gridSize;
 
             board.boardData = new int[this.gridSize, this.gridSize];
+            board.rows = new int[gridSize][];
+            board.cols = new int[gridSize][];
+            board.grids = new int[gridSize][];
 
             // 내용을 그대로 복사한다.
             for (int i = 0; i < gridSize; i++)
             {
+                board.rows[i] = new int[gridSize];
+                board.cols[i] = new int[gridSize];
+                board.grids[i] = new int[gridSize];
                 for (int j = 0; j < gridSize; j++)
                 {
                     board.boardData[i, j] = this.boardData[i, j];
+                    board.rows[i][j] = rows[i][j];
+                    board.cols[i][j] = cols[i][j];
+                    board.grids[i][j] = grids[i][j];
                 }
             }
             board.width = width;

@@ -83,9 +83,9 @@ namespace Sudoku.Modules
 
             for(int i = 0; i < gridSize; i++)
             {
-                r[i] = copied.getRow(i);
-                c[i] = copied.getCol(i);
-                g[i / gridWidth, i % gridWidth] = copied.getGrid(i / gridWidth, i % gridWidth);
+                r[i] = copied.getRow(i).ToList<int>();
+                c[i] = copied.getCol(i).ToList<int>();
+                g[i / gridWidth, i % gridWidth] = copied.getGrid((i / gridWidth) * gridWidth, (i % gridWidth) * gridWidth).ToList<int>();
             }
 
             List<int> total = new List<int>();
