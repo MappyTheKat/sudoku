@@ -22,8 +22,6 @@ namespace Sudoku.Modules
         public bool Solve()
         {
             //Console.WriteLine("called solve");
-            var cb = copied.boardData;
-            var ob = original.boardData;
             
             List<int>[,] map = drawMap();
             /*
@@ -71,7 +69,7 @@ namespace Sudoku.Modules
             }
             if(x == -1)
                 return false;
-            copied.boardData[x, y] = map[x, y][0];
+            copied.setBoard(x, y, map[x, y][0]);
             return true;
         }
 
@@ -95,7 +93,7 @@ namespace Sudoku.Modules
             {
                 for (int j = 0; j < gridSize; j++)
                 {
-                    if (copied.boardData[i, j] != 0)
+                    if (copied.getBoard(i, j) != 0)
                     {
                         map[i, j] = new List<int>();
                         continue;

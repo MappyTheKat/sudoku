@@ -45,17 +45,17 @@ namespace Sudoku.Modules
             {
                 for (j = 0; j < gridSize; j++)
                 {
-                    if (copied.boardData[i, j] == 0)
+                    if (copied.getBoard(i, j) == 0)
                     {
                         for (k = 1; k <= gridSize; k++)
                         {
-                            copied.boardData[i, j] = k;
+                            copied.setBoard(i, j, k);
                             if (copied.isValid() && backtrack(n - 1))
                             {
                                 return true;
                             }
                         }
-                        copied.boardData[i, j] = 0;
+                        copied.setBoard(i, j, 0);
                         return false;
                     }
                 }
