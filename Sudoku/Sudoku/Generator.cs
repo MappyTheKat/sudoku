@@ -63,7 +63,7 @@ namespace Sudoku
                         if (!selected.Contains(inputPosition))
                         {
                             selected.Add(inputPosition);
-                            newBoard.setBoard(inputPosition / gridSize, inputPosition % gridSize, r.Next(1, gridSize));
+                            newBoard.boardData[inputPosition / gridSize, inputPosition % gridSize] = r.Next(1, gridSize);
                             numberSelect--;
                         }
                     }

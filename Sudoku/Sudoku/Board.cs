@@ -9,55 +9,8 @@ namespace Sudoku
 {
     public class Board : ICloneable
     {
-        int[,] boardData; // 0 은 빈칸, boardData[row, column]
+        public int[,] boardData; // 0 은 빈칸
         public int gridSize = 0; // 작은 네모칸의 사이즈
-        int width; // 한 그리드의 사이즈
-        bool valid = true;
-        int[,] rows;
-        int[,] cols;
-        int[,] grids;
-
-        public void setBoard(int i, int j, int value)
-        {
-            boardData[i, j] = value;
-            /*
-            var r = getRow(i);
-            var c = getCol(j);
-            var g = getGrid(i / width, j / width);
-            if (valid)
-            {
-                if (count_number(r, value) > 1 || count_number(c, value) > 1 || count_number(g, value) > 1)
-                    valid = false;
-            }
-            else
-                checkValid();   */
-        }
-
-        public int getBoard(int i, int j)
-        {
-            return boardData[i, j];
-        }
-
-        private void checkValid()
-        {
-            for (int i = 0; i < gridSize; i++)
-            {
-                var r = getRow(i);
-                var c = getCol(i);
-                var g = getGrid(i % width, i / width);
-                for (int j = 1; j <= gridSize; j++)
-                {
-                    if (count_number(r, j) > 1
-                        || count_number(c, j) > 1
-                        || count_number(g, j) > 1)
-                    {
-                        valid = false;
-                        return;
-                    }
-                }
-            }
-            valid = true;
-        }
 
         public Board(string str)
         {
@@ -85,10 +38,6 @@ namespace Sudoku
                     boardData[i, j] = Int32.Parse(parsed[i * gridSize + j]);
                 }
             }
-
-            //check wether board is valid
-            width = (int)Math.Sqrt(gridSize);
-            checkValid();
         }
 
         public override string ToString()
@@ -108,8 +57,23 @@ namespace Sudoku
 
         public bool isValid()
         {
-            checkValid();
-            return valid;
+            //check wether board is valid
+            
+            int width = (int) Math.Sqrt(gridSize);
+            for(int i = 0; i < gridSize; i++)
+            {
+                var r = getRow(i);
+                var c = getCol(i);
+                var g = getGrid(i % width, i / width);
+                for(int j = 1; j <= gridSize; j++)
+                {
+                    if (count_number(r, j) > 1
+                        || count_number(c, j) > 1
+                        || count_number(g, j) > 1)
+                        return false;
+                }
+            }
+            return true;
         }
 
         public bool isComplete()
@@ -207,8 +171,6 @@ namespace Sudoku
                     board.boardData[i, j] = this.boardData[i, j];
                 }
             }
-            board.width = width;
-            board.valid = valid;
             return board;
         }
     }
