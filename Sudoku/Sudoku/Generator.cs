@@ -75,20 +75,43 @@ namespace Sudoku
                 sv.PresentBoard += PresentBoard;
             }
             while (!sv.solve(2));
-            
+
             // TODO: implement digging holes here.
+            status = 1; // DO NOT PRESENT WHILE THIS REGION
+
             Board Digged = sv.solution.Copy();
-            status = 1;
+            bool[,] DONOTDIG = new bool[gridSize,gridSize];
+            holeNumber = r.Next(54, 73); // 9x9 Normal difficulty (temporal), we should implement difficulty later
             sv = null;
-            holeNumber = r.Next(54, 68); // 9x9 Normal difficulty (temporal), we should implement difficulty later
-            //do {
+            int[] shuffledArr = new int[gridSize * gridSize];
+
+            for (int i = 0; i < gridSize * gridSize; i++)
+            {
+                DONOTDIG[i / gridSize, i % gridSize] = false;
+                shuffledArr[i] = i;
+            }
+                
+            // shuffling size array...
+            int n = shuffledArr.Length;
+            while (n > 1)
+            {
+                int k = r.Next(n--);
+                int temp = shuffledArr[n];
+                shuffledArr[n] = shuffledArr[k];
+                shuffledArr[k] = temp;
+            }
+
+            //lets dig holes!
+            int cnt = gridSize * gridSize - 1;
             while (holeNumber > 0)
             {
-                int digRow = r.Next(0, gridSize);
-                int digCol = r.Next(0, gridSize);
+                if (cnt == 0)
+                    break;
+                int digRow = shuffledArr[cnt] / gridSize;
+                int digCol = shuffledArr[cnt--] % gridSize;
                 int diggedNumber = Digged.getBoard(digRow, digCol);
 
-                if (Digged.getBoard(digRow, digCol) == 0)
+                if (DONOTDIG[ digRow, digCol ])
                     continue;
 
                 bool nope = false;
@@ -101,6 +124,7 @@ namespace Sudoku
                     sv = new Solver(Digged);
                     if (sv.solve(2))
                     {
+                        DONOTDIG[digRow, digCol] = true;
                         Digged.setBoard(digRow, digCol, diggedNumber);
                         nope = true;
                         holeNumber++;
@@ -109,15 +133,12 @@ namespace Sudoku
                 }
                 if (!nope)
                 {
-                    Console.WriteLine("digging #{0}: {1}, {2}", holeNumber, digRow, digCol);
+                    DONOTDIG[digRow, digCol] = true;
+                    //Console.WriteLine("digging #{0}: {1}, {2}", holeNumber, digRow, digCol);
                     Digged.setBoard(digRow, digCol, 0);
                     newBoard = Digged.Copy();
                 }
-                    
-
             }
-            //}
-            //while (!Digged.isValid());
 
             Console.WriteLine("generating complete");
             Console.WriteLine(Digged.ToString());
