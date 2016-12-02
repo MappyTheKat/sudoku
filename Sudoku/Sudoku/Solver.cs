@@ -37,7 +37,7 @@ namespace Sudoku
 
             if(!originalBoard.isValid())
             {// 보드가 정상이 아니네용...
-                SolveEnded(this, new SolveEndedArgs(solution.isComplete(), "invalid puzzle..."));
+                SolveEnded?.Invoke(this, new SolveEndedArgs(solution.isComplete(), "invalid puzzle..."));
                 return false;
             }
 
@@ -72,7 +72,7 @@ namespace Sudoku
                         sm.Solve();
                         solution = sm.original;
                         originalBoard = sm.original.Copy();
-                        PresentBoard(this, new PresentBoardArgs(sm.original.ToString()));
+                        PresentBoard?.Invoke(this, new PresentBoardArgs(sm.original.ToString()));
                         done = true;
                         message = "single completed";
                     }));
@@ -114,7 +114,7 @@ namespace Sudoku
             {
                 thread.Abort();
             }
-            PresentBoard(this, new PresentBoardArgs(solution.ToString()));
+            PresentBoard?.Invoke(this, new PresentBoardArgs(solution.ToString()));
             SolveEnded?.Invoke(this, new SolveEndedArgs(solution.isComplete(), "중단되었습니다."));
         }
 
@@ -134,7 +134,7 @@ namespace Sudoku
             if (solved)
             {
                 solution = bm.GetSolution().Copy();
-                PresentBoard(this, new PresentBoardArgs(solution.ToString()));
+                PresentBoard?.Invoke(this, new PresentBoardArgs(solution.ToString()));
             }
             Console.WriteLine(solution.ToString());
             Console.WriteLine("valid : " + solution.isValid());

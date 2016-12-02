@@ -264,13 +264,11 @@ namespace Sudoku
             
             //board는 solver가 업데이트함.
             MessageBox.Show(e.completed ? "성공" : "실패 " + ":" + e.message);
+            solver = null;
         }
 
         public void gn_GenerateEnded(object sender, EventArgs e)
         {
-            if (!stopWatch.IsRunning)
-                return;
-            stopWatch.Stop();
             stopWatch.Stop(); // StopWatch를 멈춘다.
             xTextBlockElapsedTime.Dispatcher.Invoke(
                 new TimerCallback(() => xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString())
