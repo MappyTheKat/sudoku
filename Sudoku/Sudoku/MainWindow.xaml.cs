@@ -163,16 +163,16 @@ namespace Sudoku
                 "0 0 0 7 2 0 8 0 0\n" +
                 "0 8 2 0 9 0 0 0 3\n",
 
-            // valid punched dummy puzzle data!
-                "0 0 0 0 2 4 5 1 8\n" +
-                "0 2 7 8 5 9 3 6 4\n" +
-                "0 0 0 3 1 0 9 2 7\n" +
-                "5 6 9 4 8 2 7 3 1\n" +
-                "3 7 8 5 6 1 4 9 2\n" +
-                "0 0 0 9 7 3 8 5 6\n" +
-                "8 4 2 1 3 5 6 7 9\n" +
-                "7 5 6 2 9 8 0 4 0\n" +
-                "9 3 1 6 4 7 0 0 0\n",
+            // single validation
+                "0 0 0 0 0 0 5 0 0\n" +
+                "1 6 0 9 0 0 0 0 0\n" +
+                "0 0 9 0 6 4 0 0 0\n" +
+                "0 0 0 0 0 0 0 0 4\n" +
+                "4 0 0 0 2 0 1 0 0\n" +
+                "0 0 0 3 0 0 0 5 0\n" +
+                "0 0 2 0 8 9 0 0 0\n" +
+                "0 1 0 2 5 0 0 3 0\n" +
+                "7 0 0 1 0 0 0 0 9\n",
 
             // sample puzzle
                 "5 3 0 0 7 0 0 0 0\n" +
@@ -212,6 +212,19 @@ namespace Sudoku
             {
                 xGridPuzzleBoard.ColumnDefinitions.Add(new ColumnDefinition());
                 xGridPuzzleBoard.RowDefinitions.Add(new RowDefinition());
+            }
+
+            for (int l = 0; l < size; l++)
+            {
+                for (int m = 0; m < size; m++)
+                {
+                    var border = new Border { BorderThickness = new Thickness(3), BorderBrush = Brushes.DeepPink };
+                    xGridPuzzleBoard.Children.Add(border);
+                    border.SetValue(Grid.ColumnProperty, l * size);
+                    border.SetValue(Grid.RowProperty, m * size);
+                    border.SetValue(Grid.ColumnSpanProperty, size);
+                    border.SetValue(Grid.RowSpanProperty, size);
+                }
             }
 
             for (int j = 0; j < poweredsize; j++)

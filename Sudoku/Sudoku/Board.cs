@@ -94,8 +94,8 @@ namespace Sudoku
                 rows[i] = new int[gridSize];
                 cols[i] = new int[gridSize];
                 grids[i] = new int[gridSize];
-                int offseti = (i / 3) * width;
-                int offsetj = (i % 3) * width;
+                int offseti = (i / width) * width;
+                int offsetj = (i % width) * width;
                 for (int j = 0; j < gridSize; j++)
                 {
                     rows[i][j] = boardData[i, j];
@@ -177,12 +177,6 @@ namespace Sudoku
             return grids[(i / width) * width + j / width];
         }
 
-        // 기본 생성자. Clone을 구현하기 위해서 만든 것이니 웬만하면 호출하지 맙시다.
-        public Board()
-        {
-
-        }
-
         public Board Copy()
         {
             return ((ICloneable)this).Clone() as Board;
@@ -190,31 +184,7 @@ namespace Sudoku
 
         object ICloneable.Clone()
         {
-            var board = new Board(); // TODO: 이거 그냥 Board에 인자 넣어도 되는거 아닌지 알아보기
-            board.gridSize = this.gridSize;
-
-            board.boardData = new int[this.gridSize, this.gridSize];
-            board.rows = new int[gridSize][];
-            board.cols = new int[gridSize][];
-            board.grids = new int[gridSize][];
-
-            // 내용을 그대로 복사한다.
-            for (int i = 0; i < gridSize; i++)
-            {
-                board.rows[i] = new int[gridSize];
-                board.cols[i] = new int[gridSize];
-                board.grids[i] = new int[gridSize];
-                for (int j = 0; j < gridSize; j++)
-                {
-                    board.boardData[i, j] = this.boardData[i, j];
-                    board.rows[i][j] = rows[i][j];
-                    board.cols[i][j] = cols[i][j];
-                    board.grids[i][j] = grids[i][j];
-                }
-            }
-            board.width = width;
-            board.valid = valid;
-            return board;
+            return new Board(ToString());
         }
     }
 }
