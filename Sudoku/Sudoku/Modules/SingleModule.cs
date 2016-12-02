@@ -24,19 +24,7 @@ namespace Sudoku.Modules
             //Console.WriteLine("called solve");
             
             List<int>[,] map = drawMap();
-            /*
-            for(int i = 0; i < gridSize; i++)
-            {
-                for(int j = 0; j < gridSize; j++)
-                {
-                    if (map[i, j].Count != 0) {
-                        Console.Write("i: {0} j: {1} ==>", i, j);
-                        foreach (var ele in map[i, j])
-                            Console.Write(" {0}", ele);
-                        Console.WriteLine();
-                    }
-                }
-            }*/
+            //printDrawMap(map);
 
             if (fillSingle(map))
             {
@@ -51,8 +39,26 @@ namespace Sudoku.Modules
             return false;
         }
 
+        private void printDrawMap(List<int>[,] map)
+        {
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    if (map[i, j].Count != 0)
+                    {
+                        Console.Write("i: {0} j: {1} ==>", i, j);
+                        foreach (var ele in map[i, j])
+                            Console.Write(" {0}", ele);
+                        Console.WriteLine();
+                    }
+                }
+            }
+        }
+
         private bool fillSingle(List<int>[,] map)
         {
+            // Naked Single
             int x = -1, y = -1;
             for(int i = 0; i < gridSize; i++)
             {
@@ -67,10 +73,53 @@ namespace Sudoku.Modules
                     }
                 }
             }
-            if(x == -1)
-                return false;
-            copied.setBoard(x, y, map[x, y][0]);
-            return true;
+            if(x != -1)
+            {
+                copied.setBoard(x, y, map[x, y][0]);
+                return true;
+            }
+
+            // Hidden single
+            
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    foreach(int target in map[i, j])
+                    {
+                        int[] found = { 0, 0, 0 };
+                        int width = (int)Math.Sqrt(gridSize);
+                        int offseti = (i / width) * width;
+                        int offsetj = (j / width) * width;
+                        for(int k = 0; k < gridSize; k++)
+                        {
+                            //row find
+                            if (map[i, k].IndexOf(target) != -1)
+                            {
+                                found[0]++;
+                            }
+                            //col find
+                            if(map[k, j].IndexOf(target) != -1)
+                            {
+                                found[1]++;
+                            }
+                            //grid find
+                            if(map[offseti + k / width, offsetj + k % width].IndexOf(target) != -1)
+                            {
+                                found[2]++;
+                            }
+                        }
+                        if (found[0] == 1 || found[1] == 1 || found[2] == 1)
+                        {
+                            //Console.WriteLine("found at {0}, {1} -> {2}", i, j, target);
+                            copied.setBoard(i, j, target);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;           
         }
 
         private List<int>[,] drawMap()

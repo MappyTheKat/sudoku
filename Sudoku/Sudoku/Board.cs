@@ -94,8 +94,8 @@ namespace Sudoku
                 rows[i] = new int[gridSize];
                 cols[i] = new int[gridSize];
                 grids[i] = new int[gridSize];
-                int offseti = (i / 3) * width;
-                int offsetj = (i % 3) * width;
+                int offseti = (i / width) * width;
+                int offsetj = (i % width) * width;
                 for (int j = 0; j < gridSize; j++)
                 {
                     rows[i][j] = boardData[i, j];
