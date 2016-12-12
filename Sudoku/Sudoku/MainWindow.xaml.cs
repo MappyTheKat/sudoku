@@ -218,7 +218,7 @@ namespace Sudoku
             {
                 for (int m = 0; m < size; m++)
                 {
-                    var border = new Border { BorderThickness = new Thickness(3), BorderBrush = Brushes.DeepPink };
+                    var border = new Border { BorderThickness = new Thickness(2), BorderBrush = Brushes.DeepPink };
                     xGridPuzzleBoard.Children.Add(border);
                     border.SetValue(Grid.ColumnProperty, l * size);
                     border.SetValue(Grid.RowProperty, m * size);
