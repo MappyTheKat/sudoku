@@ -21,6 +21,7 @@
 
 * IIS로 올린 웹 페이지를 통한 배포
 * Jenkins에서 post-build command를 이용하여 원격 저장소에 게시
+* http://58.121.74.195/Deploy/Sudoku.exe
 
 # Getting started
 
