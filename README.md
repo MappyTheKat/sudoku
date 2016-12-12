@@ -22,6 +22,7 @@
 * 젠킨스 서버와 동일한 서버에서 IIS로 올린 웹 페이지를 통한 배포
 * Jenkins에서 post-build command를 이용하여 원격 저장소에 게시
 * http://58.121.74.195/Deploy/Sudoku.exe
+* 윈도우 데스크탑용 어플리케이션으로 데스크탑 환경에서만 접근 및 실행가능
 
 # Getting started
 
