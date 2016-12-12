@@ -10,7 +10,8 @@
 
 ## 빌드관리
 
-* jenkins를 쓰지 않을까?
+* jenkins 사용
+* http://58.121.74.195:8081 을 통해 젠킨스 관리자 웹 콘솔에 접근가능
 
 ### unit test tool
 
@@ -18,7 +19,8 @@
 
 ## 배포관리
 
-* 아직 생각해보지 않음
+* IIS로 올린 웹 페이지를 통한 배포
+* Jenkins에서 post-build command를 이용하여 원격 저장소에 게시
 
 # Getting started
 
