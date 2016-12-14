@@ -278,7 +278,7 @@ namespace Sudoku
         public void xButtonGetWebSamplePressed(object sender, EventArgs e)
         {
             HttpParser hp = new HttpParser(gridSize);
-            int difficulty = 3;
+            int difficulty = xComboBoxSampleDifficulty.SelectedIndex + 1;
             Random r = new Random();
             int num = r.Next() % 10000;
             string ret = "";

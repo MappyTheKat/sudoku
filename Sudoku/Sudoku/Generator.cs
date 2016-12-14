@@ -42,13 +42,20 @@ namespace Sudoku
             return newBoard;
         }
 
+        public static bool threeseconds()
+        {
+            System.Threading.Thread.Sleep(3000);
+            Console.WriteLine("i counted three seconds...");
+            return true;
+        }
+
         public void generate(int holeNumber)
         {
             int NUM_MAX = gridSize * 3 - 6; // number of random generated numbers
             status = 0;
             List<int> selected = new List<int>();
             Random r = new Random();
-
+            bool solved = false;
             //lasvegas algorithms.
             do // while bm has a solution
             {
@@ -73,10 +80,33 @@ namespace Sudoku
                 while (!newBoard.isValid());
                 sv = new Solver(newBoard);
                 sv.PresentBoard += PresentBoard;
+                bool DONE = false;
+                var t0 = new System.Threading.Thread(() => {
+                    threeseconds();
+                    if(DONE == false)
+                    {
+                        sv.killSolver();
+                        DONE = true;
+                    }
+                });
+                var t1 = new System.Threading.Thread(() =>
+                {
+                    solved = sv.solve(2, true);
+                    Console.WriteLine("solved in three seconds...");
+                    DONE = true;
+                });
+                t0.Start();
+                t1.Start();
+                while (!DONE)
+                {
+                    System.Threading.Thread.Sleep(200);
+                }
+                t0.Abort();
+                t1.Abort();
             }
-            while (!sv.solve(2));
+            while (!solved);
 
-            // TODO: implement digging holes here.
+            Console.WriteLine("digging hole initiated");
             status = 1; // DO NOT PRESENT WHILE THIS REGION
 
             Board Digged = sv.solution.Copy();
@@ -122,7 +152,7 @@ namespace Sudoku
                         continue;
                     Digged.setBoard(digRow, digCol, i);
                     sv = new Solver(Digged);
-                    if (sv.solve(2))
+                    if (sv.solve(2, true))
                     {
                         DONOTDIG[digRow, digCol] = true;
                         Digged.setBoard(digRow, digCol, diggedNumber);

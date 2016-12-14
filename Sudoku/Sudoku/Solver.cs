@@ -102,20 +102,6 @@ namespace Sudoku
             {
                 //do some hueristic...
                 bool done = false;
-                /*threads.Add(new Thread(
-                    () =>
-                    {
-                        fiveseconds();
-                        message = "timed out after " + 5 + " seconds";
-                        done = true;
-                    }));
-                threads.Add(new Thread(
-                    () =>
-                    {
-                        SolveBacktrack();
-                        message = "backtracking completed";
-                        done = true;
-                    }));*/
                 threads.Add(new Thread(
                     () =>
                     {
@@ -141,9 +127,34 @@ namespace Sudoku
             if (solvingMethod == 2)
             {// heuristic + backtrack
                 threads.Clear();
-                threads.Add(new Thread(SolveBacktrack));
-                threads[0].Start();
-                threads[0].Join();
+                if (enable_multithread)
+                {
+                    bool done = false;
+                    int counter = multi_candidates.Count;
+                    foreach (Board candy in multi_candidates)
+                    {
+                        threads.Add(new Thread(() => {
+                            if (solveBacktrack(candy))
+                                done = true;
+                            counter--;
+                        }));
+                    }
+                    foreach (var t in threads)
+                        t.Start();
+                    while (!done && counter != 0)
+                    {
+                        //implement job scheduler...
+                        Thread.Sleep(30);
+                    }
+                    foreach (var t in threads)
+                        t.Abort();
+                }
+                else
+                {
+                    threads.Add(new Thread(SolveBacktrack));
+                    threads[0].Start();
+                    threads[0].Join();
+                }
             }
             Console.WriteLine("solver returned {0}", solution.isComplete());
             SolveEnded?.Invoke(this, new SolveEndedArgs(solution.isComplete(), message));
@@ -207,7 +218,7 @@ namespace Sudoku
 
         void SolveBacktrack()
         {
-            Console.WriteLine("backtraking initiated.");
+            //Console.WriteLine("backtraking initiated.");
             bm = new BacktrackingModule(originalBoard);
             var solved = bm.solve();
             string message = string.Empty;
@@ -216,16 +227,16 @@ namespace Sudoku
                 solution = bm.GetSolution().Copy();
                 PresentBoard?.Invoke(this, new PresentBoardArgs(solution.ToString()));
             }
-            Console.WriteLine(solution.ToString());
-            Console.WriteLine("valid : " + solution.isValid());
-            Console.WriteLine("complete : " + solution.isComplete());
+            //Console.WriteLine(solution.ToString());
+            //Console.WriteLine("valid : " + solution.isValid());
+            //Console.WriteLine("complete : " + solution.isComplete());
             return;
         }
         
         //solve backtrack for specific board.
         bool solveBacktrack(Board b)
         {
-            Console.WriteLine("multithreaded-backtraking initiated.");
+            //Console.WriteLine("multithreaded-backtraking initiated.");
             BacktrackingModule BM = new BacktrackingModule(b);
             if (bm == null)
                 bm = BM;
@@ -237,8 +248,8 @@ namespace Sudoku
                 solution = BM.GetSolution().Copy();
                 PresentBoard?.Invoke(this, new PresentBoardArgs(solution.ToString()));
             }
-            Console.WriteLine("valid : " + solution.isValid());
-            Console.WriteLine("complete : " + solution.isComplete());
+            //Console.WriteLine("valid : " + solution.isValid());
+            //Console.WriteLine("complete : " + solution.isComplete());
             return solved;
         }
 
