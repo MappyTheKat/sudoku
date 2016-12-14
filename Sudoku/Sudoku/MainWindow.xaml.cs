@@ -291,6 +291,34 @@ namespace Sudoku
             PresentBoard(ret);
         }
 
+        public void xButtonSaveToFilePressed(object sender, EventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "boardstring";
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+            Nullable<bool> result = dlg.ShowDialog();
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                System.IO.File.WriteAllText(filename, ParseInputBox());
+            }
+        }
+
+        public void xButtonLoadFromFilePressed(object sender, EventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "boardstring";
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+            Nullable<bool> result = dlg.ShowDialog();
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                PresentBoard(System.IO.File.ReadAllText(filename));
+            }
+        }
+
         public void sv_SolveEnded(object sender, SolveEndedArgs e)
             // solver가 수행을 끝나면 실행하는 이벤트
         {

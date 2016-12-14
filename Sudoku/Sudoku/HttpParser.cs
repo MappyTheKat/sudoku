@@ -31,7 +31,7 @@ namespace Sudoku
             //for 16 x 16
             foreach (var n in mydoc.DocumentNode.SelectNodes(xpath))
             {
-                Boardstring += n.InnerText.Replace("&nbsp;", "0") + " ";
+                Boardstring += stringReplacer(n.InnerText) + " ";
             }
 
             Console.WriteLine(Boardstring);
@@ -40,7 +40,8 @@ namespace Sudoku
 
         string stringReplacer(string str)
         {
-            return str.Replace("A", "10").Replace("B", "11").Replace("C", "12").Replace("D", "13").Replace("E", "14").Replace("F", "15").Replace("0", "16").Replace("&nbsp;", "0");
+            return str.Replace("0", "16").Replace("A", "10").Replace("B", "11").Replace("C", "12").Replace("D", "13")
+                .Replace("E", "14").Replace("F", "15").Replace("&nbsp;", "0");
         }
 
     }
