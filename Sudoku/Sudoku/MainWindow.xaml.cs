@@ -257,9 +257,19 @@ namespace Sudoku
             // 방법 선택. 0 == backtrack, 1 == heuristic
             var m = xComboBoxSelectMethod.SelectedIndex;
 
-            solvingThread = new Thread(() => {
-                solver.solve(m);
+            if (xCheckBoxMultithreadEnable.IsChecked.Value)
+            {
+                solvingThread = new Thread(() => {
+                    Console.WriteLine("enabled multithread");
+                    solver.solve(m, true);
                 });
+            }
+            else
+            {
+                solvingThread = new Thread(() => {
+                    solver.solve(m);
+                });
+            }
             StatusRunning("문제 해결중");
             dt.Start();
             solvingThread.Start();
