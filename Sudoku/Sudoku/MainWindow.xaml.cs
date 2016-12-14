@@ -44,7 +44,7 @@ namespace Sudoku
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             dt = new DispatcherTimer();
-            dt.Interval = new TimeSpan(0, 0, 0, 0, 10); // Tick 10 ms
+            dt.Interval = new TimeSpan(0, 0, 0, 0, 1000/60); // Tick 60fps
             dt.Tick += new EventHandler(dispatcherTimer_Tick);
         }
 
