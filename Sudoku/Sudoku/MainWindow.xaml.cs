@@ -275,6 +275,22 @@ namespace Sudoku
             solvingThread.Start();
         }
 
+        public void xButtonGetWebSamplePressed(object sender, EventArgs e)
+        {
+            HttpParser hp = new HttpParser(gridSize);
+            int difficulty = 3;
+            Random r = new Random();
+            int num = r.Next() % 10000;
+            string ret = "";
+            if(gridSize == 3)
+                ret = hp.getBoardStringFromURL("http://en.top-sudoku.com/cgi-bin/sudoku/print-a-sudoku-puzzle.cgi?eso=1&niv=" + difficulty + "&num=" + num);
+            if(gridSize == 4)
+                ret = hp.getBoardStringFromURL("http://en.top-sudoku.com/cgi-bin/hexadoku/print-1-grid-hexadoku.cgi?" + difficulty);
+            if(gridSize == 5)
+                MessageBox.Show("Implement this...");
+            PresentBoard(ret);
+        }
+
         public void sv_SolveEnded(object sender, SolveEndedArgs e)
             // solver가 수행을 끝나면 실행하는 이벤트
         {
