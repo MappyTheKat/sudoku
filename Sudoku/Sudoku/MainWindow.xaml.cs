@@ -70,7 +70,7 @@ namespace Sudoku
             xComboBoxSelectPuzzleSize.SelectionChanged += xComboBoxGridsizeSelectChanged;
             xComboBoxSelectSampleInput.SelectionChanged += xComboBoxSampleInputChanged;
             xButtonSolveNow.Click += xButtonSolveNowPressed;
-            xButtonRandomGenerate.Click += xButtonRandomGeneratePressed;
+            //xButtonRandomGenerate.Click += xButtonRandomGeneratePressed;
             xButtonStopSolve.Click += xButtonStopSolvePressed;
             StatusReady(); // 처음에 한번 초기화.
             xComboBoxSelectSampleInput.SetValue(ComboBox.SelectedIndexProperty, 4);
@@ -79,13 +79,18 @@ namespace Sudoku
 
         private void xButtonRandomGeneratePressed(object sender, RoutedEventArgs e)
         {
+            int difficulty = xComboBoxGenerateProblemDifficulty.SelectedIndex;
+            int[] clues = { 52, 38, 28, 27, 19 };
+            int numGrid = gridSize * gridSize;
+            int numGenerate = Int32.Parse(xTextBoxInputProblems.Text);
             StatusRunning("생성중");
             stopWatch.Restart();
 
             gn = new Generator(gridSize * gridSize);
             gn.PresentBoard += sv_PresentBoard;
             gn.GenerateEnded += gn_GenerateEnded;
-            solvingThread = new Thread(() => gn.generate(0));
+            solvingThread = new Thread(() => 
+                gn.generate(numGenerate, numGrid * numGrid - clues[difficulty]));
             solvingThread.Start();
             dt.Start();
         }
@@ -333,6 +338,7 @@ namespace Sudoku
                 new TimerCallback(() => xTextBlockElapsedTime.Text = stopWatch.Elapsed.ToString())
             ); // 경과시간 작성
             gn = null;
+            //create file 
         }
 
         void PresentBoard(string boardString)
@@ -383,7 +389,7 @@ namespace Sudoku
             xComboBoxSelectPuzzleSize.IsEnabled = true;
             xComboBoxSelectSampleInput.IsEnabled = true;
             xButtonSolveNow.IsEnabled = true;
-            xButtonRandomGenerate.IsEnabled = true;
+            xButtonGenerateProblems.IsEnabled = true;
             xButtonStopSolve.IsEnabled = false;
         }
 
@@ -393,7 +399,7 @@ namespace Sudoku
             xComboBoxSelectPuzzleSize.IsEnabled = false;
             xComboBoxSelectSampleInput.IsEnabled = false;
             xButtonSolveNow.IsEnabled = false;
-            xButtonRandomGenerate.IsEnabled = false;
+            xButtonGenerateProblems.IsEnabled = false;
             xButtonStopSolve.IsEnabled = true;
         }
     }

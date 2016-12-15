@@ -11,10 +11,11 @@ namespace Sudoku
     {
         public event EventHandler<PresentBoardArgs> PresentBoard;
         public event EventHandler<EventArgs> GenerateEnded;
-
+        
         Solver sv;
         Board initBoard;
         Board newBoard;
+        Board SolBoard;
         int gridSize;
         int status;
  
@@ -49,7 +50,37 @@ namespace Sudoku
             return true;
         }
 
-        public void generate(int holeNumber)
+        public void generate(int numOfGenerate, int hn)
+        {
+            Console.WriteLine("digging {0}", hn);
+            string str = "";
+            string retstr = "";
+            //implement difficulty here.
+            for (int i = 0; i < numOfGenerate; i++)
+            {
+                str = generateString(hn);
+                PresentBoard(this, new PresentBoardArgs(str));
+                retstr += str + "\n";
+            }
+            endGenerate();
+            if(numOfGenerate > 1)
+            {
+                //save to file
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                dlg.FileName = "generated";
+                dlg.DefaultExt = ".txt";
+                dlg.Filter = "Text documents (.txt)|*.txt";
+                Nullable<bool> result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    string filename = dlg.FileName;
+                    System.IO.File.WriteAllText(filename, retstr);
+                }
+            }
+        }
+
+        public string generateString(int holeNumber)
+            // generate n boards...
         {
             int NUM_MAX = gridSize * 3 - 6; // number of random generated numbers
             status = 0;
@@ -83,7 +114,7 @@ namespace Sudoku
                 bool DONE = false;
                 var t0 = new System.Threading.Thread(() => {
                     threeseconds();
-                    if(DONE == false)
+                    if (DONE == false)
                     {
                         sv.killSolver();
                         DONE = true;
@@ -110,8 +141,8 @@ namespace Sudoku
             status = 1; // DO NOT PRESENT WHILE THIS REGION
 
             Board Digged = sv.solution.Copy();
-            bool[,] DONOTDIG = new bool[gridSize,gridSize];
-            holeNumber = r.Next(54, 73); // 9x9 Normal difficulty (temporal), we should implement difficulty later
+            bool[,] DONOTDIG = new bool[gridSize, gridSize];
+            //holeNumber = r.Next(54, 73); // 9x9 Normal difficulty (temporal), we should implement difficulty later
             sv = null;
             int[] shuffledArr = new int[gridSize * gridSize];
 
@@ -120,7 +151,7 @@ namespace Sudoku
                 DONOTDIG[i / gridSize, i % gridSize] = false;
                 shuffledArr[i] = i;
             }
-                
+
             // shuffling size array...
             int n = shuffledArr.Length;
             while (n > 1)
@@ -141,12 +172,12 @@ namespace Sudoku
                 int digCol = shuffledArr[cnt--] % gridSize;
                 int diggedNumber = Digged.getBoard(digRow, digCol);
 
-                if (DONOTDIG[ digRow, digCol ])
+                if (DONOTDIG[digRow, digCol])
                     continue;
 
                 bool nope = false;
                 holeNumber--;
-                for(int i = 1; i <= gridSize; i++)
+                for (int i = 1; i <= gridSize; i++)
                 {
                     if (i == diggedNumber)
                         continue;
@@ -169,11 +200,11 @@ namespace Sudoku
                     newBoard = Digged.Copy();
                 }
             }
-
+            SolBoard = Digged.Copy();
             Console.WriteLine("generating complete");
             Console.WriteLine(Digged.ToString());
             PresentBoard(this, new PresentBoardArgs(Digged.ToString()));
-            endGenerate();
+            return Digged.ToString();
         }
 
         public void endGenerate()
