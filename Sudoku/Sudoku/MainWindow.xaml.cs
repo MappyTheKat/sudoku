@@ -349,7 +349,8 @@ namespace Sudoku
             var size = textGridReference.Count;
             if (size != target.Length)
             {
-                throw new Exception("size does not match!");
+                return;
+                //throw new Exception("size does not match!");
             }
                 
             for (int i = 0; i < size; i++)

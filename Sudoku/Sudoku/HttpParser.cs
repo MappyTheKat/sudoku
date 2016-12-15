@@ -28,8 +28,13 @@ namespace Sudoku
                 xpath = "//table[@id='gr']//td";
             if (gridSize == 4)
                 xpath = "//table[@id='grid']//td";
-            //for 16 x 16
-            foreach (var n in mydoc.DocumentNode.SelectNodes(xpath))
+            var target = mydoc.DocumentNode.SelectNodes(xpath);
+            if(target == null)
+            {
+                Console.WriteLine("Html load failed...");
+                return "";
+            }
+            foreach (var n in target)
             {
                 Boardstring += stringReplacer(n.InnerText) + " ";
             }
