@@ -61,16 +61,11 @@ namespace Sudoku
                 return true;
             }
 
-
-            if (enable_multithread)
-            {
-                multi_candidates = createCandidates();
-            }
-
             if (solvingMethod == 0)
             {
                 if (enable_multithread)
                 {
+                    multi_candidates = createCandidates();
                     bool done = false;
                     int counter = multi_candidates.Count;
                     foreach(Board candy in multi_candidates)
@@ -129,6 +124,7 @@ namespace Sudoku
                 threads.Clear();
                 if (enable_multithread)
                 {
+                    multi_candidates = createCandidates();
                     bool done = false;
                     int counter = multi_candidates.Count;
                     foreach (Board candy in multi_candidates)
