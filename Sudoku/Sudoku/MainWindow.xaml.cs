@@ -343,7 +343,7 @@ namespace Sudoku
 
         void PresentBoard(string boardString)
         {
-            var target = boardString.Trim().Replace("\n", " ").Replace("  ", " ").Split();
+            var target = boardString.Trim().Replace("\r\n", " ").Replace("  ", " ").Split();
             var size = textGridReference.Count;
             if (size != target.Length)
             {

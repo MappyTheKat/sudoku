@@ -61,7 +61,7 @@ namespace Sudoku
         public Board(string str)
         {
             int[] BoardSize = {9, 16, 25, 36, 49};
-            string[] parsed = str.Trim().Replace("\n", "").Split();
+            string[] parsed = str.Trim().Replace("\r\n", "").Split();
             
             for(int i = 0; i < BoardSize.Length; i++)
             {
@@ -119,7 +119,7 @@ namespace Sudoku
                 {
                     a += boardData[i, j] + " ";
                 }
-                a += "\n";
+                a += "\r\n";
             }
             return a;
         }

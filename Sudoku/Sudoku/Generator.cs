@@ -60,7 +60,7 @@ namespace Sudoku
             {
                 str = generateString(hn);
                 PresentBoard(this, new PresentBoardArgs(str));
-                retstr += str + "\n";
+                retstr += str + "\r\n";
             }
             endGenerate();
             if(numOfGenerate > 1)
